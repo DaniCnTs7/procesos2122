@@ -16,6 +16,7 @@ function Juego() {
         //crear código único
         var codigo = "-1"
         var jugador = this.usuarios[nick]
+        codigo = this.obtenerCodigo()
         while(this.partidas[codigo]) {
             codigo = this.obtenerCodigo()
         }
@@ -69,13 +70,45 @@ function Partida(codigo, propietario, numJugadores) {
     this.propietario = propietario.nick
     this.numJugadores = numJugadores
     this.jugadores = {}
+    this.fase = new Inicial()
 
-    this.jugadores[propietario.nick] = propietario
-
-    this.unirAPartida = function(jugador) {
+    this.unirAPartida = function (jugador) {
+        this.fase.unirAPartida(this, jugador)
+    }
+    this.puedeUnirAPartida = function(jugador) {
         this.jugadores[jugador.nick] = jugador
     }
+
+    this.numeroJugadores = function() {
+        return Object.keys(this.jugadores).length
+    }
+
+    this.unirAPartida(propietario)
 }
+
+//FASES
+function Inicial() {
+    this.unirAPartida = function(partida, jugador) {
+        //si num jugadores < numJugadores
+        partida.puedeUnirAPartida(jugador)
+        if (partida.numJugadores==partida.numeroJugadores()) {
+            partida.fase = new Jugando()
+        }
+    }
+}
+
+function Jugando() {
+    this.unirAPartida = function(partida, jugador) {
+        alert("La partida ya ha comenzado")
+    }
+}
+
+function Final() {
+    this.unirAPartida = function(partida, jugador) {
+        alert("La partida ha terminado")
+    }
+}
+
 
 function Carta(color, tipo) {
     this.color = color
