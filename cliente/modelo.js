@@ -25,6 +25,8 @@ function Juego() {
         var partida = new Partida(codigo, jugador, numJugadores)
         //asignarla a la colección partidas
         this.partidas[codigo] = partida
+
+        return partida
     }
 
     this.unirAPartida = function (codigo, nick) {
@@ -44,6 +46,10 @@ function Juego() {
         }
         return codigo.join('');
     }
+
+    this.numeroPartidas = function() {
+        return Object.keys(this.partidas).length
+    }
 }
 
 //funcion random
@@ -57,7 +63,7 @@ function Jugador(nick, juego) {
     this.juego = juego
 
     this.crearPartida = function(numJugadores) {
-        this.juego.crearPartida(nick, numJugadores)
+        return this.juego.crearPartida(nick, numJugadores)
     }
 
     this.unirAPartida = function(codigo, nick) {
@@ -88,6 +94,8 @@ function Partida(codigo, propietario, numJugadores) {
 
 //FASES
 function Inicial() {
+    this.nombre = "inicial"
+
     this.unirAPartida = function(partida, jugador) {
         //si num jugadores < numJugadores
         partida.puedeUnirAPartida(jugador)
@@ -98,12 +106,16 @@ function Inicial() {
 }
 
 function Jugando() {
+    this.nombre = "jugando"
+    
     this.unirAPartida = function(partida, jugador) {
         alert("La partida ya ha comenzado")
     }
 }
 
 function Final() {
+    this.nombre = "final"
+    
     this.unirAPartida = function(partida, jugador) {
         alert("La partida ha terminado")
     }
