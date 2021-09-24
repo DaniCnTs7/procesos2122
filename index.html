@@ -14,13 +14,14 @@
     font: 20px Montserrat, sans-serif;
     line-height: 1.8;
     color: #f5f6f7;
+    
   }
   p {
     font-size: 16px;
   }
   .margin {margin-bottom: 25px;}
   .bg-1 { 
-    background-color: #1abc9c; /* Green */
+    background-color: springgreen; /* Green */
     color: #ffffff;
   }
   .bg-2 { 
@@ -51,10 +52,12 @@
   .navbar-nav  li a:hover {
     color: #1abc9c !important;
   }
-  .icon {
+  img {
     max-width: 100%;
-    height: 120px;
-    margin-top: 30px;
+    height: auto;
+  }
+  .icon {
+    height: 100px;
   }
   </style>
 </head>
@@ -84,7 +87,7 @@
 
 <!-- First Container -->
 <div class="container-fluid bg-1 text-center">
-  <h3 class="margin">El juego del Uno</h3>
+  <h1 class="margin">El juego del Uno</h1>
   <img src="./img/1.png" class="img-responsive img-circle margin" style="display:inline" alt="UNO" max-width="100%" height="350">
   <p class="container">Es el clásico juego de cartas que mezcla habilidad y velocidad. Los jugadores se turnan para hacer coincidir una carta de su mano con la actual que se muestra en la parte superior de la baraja, ya sea por color o por número.</p>
   <img class="icon" src="./img/2.png" alt="2-8 jugadores"></img>
@@ -98,18 +101,39 @@
 </div>
 
 <!-- Third Container (Grid) -->
-<div id="contacto" class="container-fluid bg-3 text-center">    
-  <h3 class="margin">Contacto</h3><br>
-  <div class="container">
-    <a href="mailto:dcantosgarcia@gmail.com" target="_blank" style="padding: 0px;"><img src="./img/4.png" class="icon" alt="email"></a>
-    <a href="https://github.com/DaniCnTs7" target="_blank"><img src="./img/5.png" class="icon" alt="github"></a>
-    <a href="https://www.linkedin.com/in/danicnts7" target="_blank"><img src="./img/6.png" class="icon" alt="linkedin"></a>
+<div class="container-fluid bg-1 text-center">
+  <div class="container-fluid well row text-center">
+    <div class="col-xs-3">
+      <img src="./img/cartas/num.png" alt="num">
+    </div>
+    <div class="col-xs-3">
+      <img src="./img/cartas/sent.png" alt="sentido">
+    </div>
+    <div class="col-xs-3">
+      <img src="./img/cartas/bloq.png" alt="bloqueo">
+    </div>
   </div>
+  <div class="row">
+    <div class="col-xs-4">
+      <img src="./img/cartas/color.png" alt="color">
+    </div>
+    <div class="col-xs-4">
+      <img src="./img/cartas/masdos.png" alt="num">
+    </div>
+    <div class="col-xs-4">
+      <img src="./img/cartas/mascuatro.png" alt="sentido">
+    </div>
+  </div>  
 </div>
 
 <!-- Footer -->
-<footer class="container-fluid bg-4 text-center">
-  <p>Juego del uno realizado por <a href="https://github.com/DaniCnTs7/uno">https://github.com/DaniCnTs7/uno</a></p> 
+<footer class="bg-3 text-center">
+  <div id="contacto">
+    <a href="mailto:dcantosgarcia@gmail.com" target="_blank"><img src="./img/4.png" class="icon" alt="email"></a>
+    <a href="https://github.com/DaniCnTs7" target="_blank"><img src="./img/5.png" class="icon" alt="github"></a>
+    <a href="https://www.linkedin.com/in/danicnts7" target="_blank"><img src="./img/6.png" class="icon" alt="linkedin"></a>
+  </div>
+  <p>Juego del uno realizado por <a href="https://github.com/DaniCnTs7/uno">Daniel Cantos García</a></p> 
 </footer>
 
 </body>
