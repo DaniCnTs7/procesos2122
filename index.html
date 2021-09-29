@@ -1,140 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <!-- Theme Made By www.w3schools.com - No Copyright -->
-  <title>El juego del Uno</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <style>
-  body {
-    font: 20px Montserrat, sans-serif;
-    line-height: 1.8;
-    color: #f5f6f7;
-    
-  }
-  p {
-    font-size: 16px;
-  }
-  .margin {margin-bottom: 25px;}
-  .bg-1 { 
-    background-color: springgreen; /* Green */
-    color: #ffffff;
-  }
-  .bg-2 { 
-    background-color: #474e5d; /* Dark Blue */
-    color: #ffffff;
-  }
-  .bg-3 { 
-    background-color: #ffffff; /* White */
-    color: #555555;
-  }
-  .bg-4 { 
-    background-color: #2f2f2f; /* Black Gray */
-    color: #fff;
-  }
-  .container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
-  }
-  .navbar {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-    font-size: 12px;
-    letter-spacing: 5px;
-  }
-  .navbar-nav  li a:hover {
-    color: #1abc9c !important;
-  }
+<title>Juego del Uno</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html {
+  scroll-behavior: smooth;
+}
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+.fa-anchor,.fa-coffee {font-size:200px}
   img {
     max-width: 100%;
     height: auto;
   }
-  .icon {
-    height: 100px;
+  nav {
+    position: fixed;
+    width: 100%;
   }
-  </style>
-</head>
+  .icon {
+    margin-top: 30px;
+    height: 150px;
+  }
+  .grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+  }
+  .grid-item {
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+  }
+  
+</style>
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-default">
-  <div class="container">
+<nav class="navbar-default w3-red sticky-top">
+  <div class="w3-bar w3-card w3-left-align w3-large">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+      <button type="button" class="navbar-toggle w3-white" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#">Uno</a>
+      <a href="#" class="navbar-brand w3-text-white" style="text-decoration: none;">EL UNO</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#how">CÓMO JUGAR</a></li>
-        <li><a href="#contacto">CONTACTO</a></li>
-        <li><a href="#">Login</a></li>
-        <li><a href="#">Registro</a></li>
+        <li><a href="#how" class="w3-text-white w3-hover-white" style="text-decoration: none;">CÓMO JUGAR</a></li>
+        <li><a href="#cartas" class="w3-text-white w3-hover-white" style="text-decoration: none;">CARTAS</a></li>
+        <li><a href="#" class="w3-text-white w3-hover-white" style="text-decoration: none;">Login</a></li>
+        <li><a href="#" class="w3-text-white w3-hover-white" style="text-decoration: none;">Registro</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- First Container -->
-<div class="container-fluid bg-1 text-center">
-  <h1 class="margin">El juego del Uno</h1>
+  <!-- Navbar on small screens -->
+  <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large">
+    <a href="#how" class="w3-bar-item w3-button w3-padding-large">CÓMO JUGAR</a>
+    <a href="#cards" class="w3-bar-item w3-button w3-padding-large">CARTAS</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Login</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Registro</a>
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="w3-container w3-red w3-center" style="padding:128px 16px">
+  <h1 class="w3-margin w3-jumbo">EL JUEGO DEL UNO</h1>
   <img src="./img/1.png" class="img-responsive img-circle margin" style="display:inline" alt="UNO" max-width="100%" height="350">
-  <p class="container">Es el clásico juego de cartas que mezcla habilidad y velocidad. Los jugadores se turnan para hacer coincidir una carta de su mano con la actual que se muestra en la parte superior de la baraja, ya sea por color o por número.</p>
+  <p class="w3-xlarge">Es el clásico juego de cartas que mezcla habilidad y velocidad. Los jugadores se turnan para hacer coincidir una carta de su mano con la actual que se muestra en la parte superior de la baraja, ya sea por color o por número.</p>
+  <div><button class="w3-button w3-light-grey w3-padding-large w3-large w3-margin-top">¡JUGAR!</button></div>
   <img class="icon" src="./img/2.png" alt="2-8 jugadores"></img>
   <img class="icon" src="./img/3.png" alt="+7 años"></img>
-</div>
+</header>
 
-<!-- Second Container -->
-<div id="how" class="container-fluid bg-2 text-center">
-  <h3 class="margin">Cómo jugar</h3>
-  <p class="container">Cada jugador comienza con siete cartas, y se reparten boca abajo. El resto de las cartas se colocan en un Pila de Cartas boca abajo. Al lado de la pila se debe designar un espacio para una Pila de Descarte. La carta de arriba debe ser colocada en la Pila de Descarte y… el juego comienza!</p>
-</div>
+<!-- Primer Grid -->
+<div id="how" class="w3-row-padding w3-padding-64 w3-container">
+  <div class="w3-content">
+    <div class="w3-twothird">
+      <h1>Cómo jugar</h1>
+      <h5 class="w3-padding-32">Para poder jugar es necesario iniciar sesión, si no tiene cuenta, pulsa en <a href="">registrar</a>.</h5>
+      <h5>Objetivo del juego</h5>
+      <p class="w3-text-grey">Ser el primer jugador en anotar 500 puntos. La manera de anotar puntos consiste en quedarse sin cartas 
+        antes que el resto de jugadores. El ganador contabiliza puntos a su favor por las cartas que les quedan 
+        en la mano a los demas jugadores al finalizar la partida.</p>
+    </div>
 
-<!-- Third Container (Grid) -->
-<div class="container-fluid bg-1 text-center">
-  <div class="container-fluid well row text-center">
-    <div class="col-xs-3">
-      <img src="./img/cartas/num.png" alt="num">
-    </div>
-    <div class="col-xs-3">
-      <img src="./img/cartas/sent.png" alt="sentido">
-    </div>
-    <div class="col-xs-3">
-      <img src="./img/cartas/bloq.png" alt="bloqueo">
+    <div class="w3-third w3-center">
+        <i class='fa fa-address-card w3-padding-64 w3-text-red w3-margin-right' style='font-size:250px'></i>
     </div>
   </div>
-  <div class="row">
-    <div class="col-xs-4">
-      <img src="./img/cartas/color.png" alt="color">
-    </div>
-    <div class="col-xs-4">
-      <img src="./img/cartas/masdos.png" alt="num">
-    </div>
-    <div class="col-xs-4">
-      <img src="./img/cartas/mascuatro.png" alt="sentido">
-    </div>
-  </div>  
 </div>
 
+<!-- Segundo Grid -->
+<div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
+  <div class="w3-content">
+    <div class="w3-third w3-center">
+      <i class="fa fa-gear w3-padding-64 w3-text-red w3-margin-right" style="font-size: 250px;"></i>
+    </div>
+
+    <div class="w3-twothird">
+      <h1>Mecánica del juego</h1>
+      <h5>Antes de empezar la partida, cada jugador toma una carta. Repatirá el jugador que saque la carta más 
+        alta. Las cartas especiales no cuantan en este caso. <br>Se mezcla la baraja y se reparten 7 cartas a cada jugador.</h5>
+
+      <p class="w3-text-grey">Las cartas sobrantes se colocan en el centro de la mesa formando el montón. Se de la vuelta a la carte 
+        superior del montón, colocándola boca arriba al lado de mismo, esta será la pila de descarte. Si dicha 
+        carta es una carta especial, se debe tener en cuenta su efecto (detallado en la sección “Cartas 
+        especiales”). <br>Empieza la partida el jugador que se encuentra situado a la derecha del que ha repartido, jugando una 
+        carta de su mano de coincida en número, color o símbolo, con la carta que se giró para formar la pila de 
+        descarte. Por ejemplo, si dicha carta es un 7 rojo, el jugador debe jugar una carta roja o un 7 de 
+        cualquier color. Tambien puede descartarse de un COMODÍN (ver la sección “Cartas especiales”).</p>
+    </div>
+  </div>
+</div>
+
+<!-- Tercer grid -->
+<div class="w3-row-padding w3-padding-64 w3-container">
+    <div class="w3-content">
+      <div class="w3-twothird">
+        <h1>Cómo pasar turno</h1>
+        <p class="w3-text-grey">Si en algún momento de la partida, un jugador no puede jugar ninguna de las cartas de su mano por no 
+            coincidir con la última de la pila de descarte, está obligado a robar una carta del montón, pudiéndola 
+            jugar inmediatamente. Si esta carta tampoco coincide en número, color o símbolo con la última de la pila 
+            de descarte, se quederá con la carta y el tumo pasará el siguiente jugador.
+            Un jugador en su turno podrá decidir no jugar una de las cartas de su mano, aunque esta coincida en 
+            número, color o símbolo con la última de la pila de descarte. En este caso, debe robar una carta del 
+            montón, pudiéndola jugar inmediatamente. Después de robar, sólo puede jugar la carta que ha robado, le 
+            está prohibido descartarse de unas de las cartas que ya tenía en la mano.<br></p>
+      </div>
+  
+      <div class="w3-third w3-center">
+          <i class='fa fa-clock-o w3-padding-32 w3-text-red w3-margin-right' style='font-size:250px'></i>
+      </div>
+    </div>
+</div>
+
+<!-- Cuarto Grid -->
+<div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
+    <div class="w3-content">
+      <div class="w3-third w3-center">
+        <i class="fa fa-trophy w3-padding-64 w3-text-red w3-margin-right" style="font-size: 250px;"></i>
+      </div>
+  
+      <div class="w3-twothird">
+        <h1>Fin de la partida</h1>  
+        <p class="w3-text-grey">Cuando un jugador juega su penúltima carta, deberá decir en voz alta “¡UNO!”, para avisar al resto de 
+            jugadores de que puede ganar en el próximo turno. Si no lo hace, tendrá que robar 2 cartas del montón, 
+            pero sólo si los demás jugadores le pillan (ver sección “PENALIZACIONES”). 
+            La partida termina cuando un jugador se queda sin cartas. Entonces se suman los puntos (ver sección 
+            “PUNTUACIÓN”) y se empieza una nueva partida. <br><br>
+            Si la última carta que se juega es una carta especial “Roba Dos” o “ Comodín Roba Cuatro”, el siguiente 
+            jugador está obligado a robar dos o cuatro cartas respectivamente, que se contarán al contabilizar su 
+            puntuación.<br><br>
+            En el caso de que se terminen todas las cartas del montón y ningún jugador haya ganado, se barajarán 
+            todas las cartas de la pila de descarte menos la última y se colocarán como montón para continuar la 
+            partida.</p>
+      </div>
+    </div>
+</div>
+<div id="cartas" class="w3-row-padding w3-padding-64 container">
+    <div class="w3-center w3-padding-section">
+        <h1 class="w3-margin w3-jumbo">CARTAS</h1>
+    </div>
+    <div class="grid-container">
+        <div class="grid-item"><img src="./img/cartas/num.png" alt="numerp"><span class="caption" style="font-size: 20px;">Carta numérica</span></div>
+        <div class="grid-item"><img src="./img/cartas/sent.png" alt="cambio de sentido"><span class="caption" style="font-size: 20px;">Cambio de sentido</span></div>
+        <div class="grid-item"><img src="./img/cartas/bloq.png" alt="bloqueo"><span class="caption" style="font-size: 20px;">Bloqueo</span></div>  
+        <div class="grid-item"><img src="./img/cartas/color.png" alt="cambio de color"><span class="caption" style="font-size: 20px;">Cambio de color</span></div>
+        <div class="grid-item"><img src="./img/cartas/masdos.png" alt="más dos"><span class="caption" style="font-size: 20px;">Más dos</span></div>
+        <div class="grid-item"><img src="./img/cartas/mascuatro.png" alt="más cuatro"><span class="caption" style="font-size: 20px;">Más cuatro</span></div>  
+    </div>
+</div>
 <!-- Footer -->
-<footer class="bg-3 text-center">
-  <div id="contacto">
-    <a href="mailto:dcantosgarcia@gmail.com" target="_blank"><img src="./img/4.png" class="icon" alt="email"></a>
-    <a href="https://github.com/DaniCnTs7" target="_blank"><img src="./img/5.png" class="icon" alt="github"></a>
-    <a href="https://www.linkedin.com/in/danicnts7" target="_blank"><img src="./img/6.png" class="icon" alt="linkedin"></a>
-  </div>
-  <p>Juego del uno realizado por <a href="https://github.com/DaniCnTs7/uno">Daniel Cantos García</a></p> 
+<footer class="w3-container w3-light-grey w3-padding-64 w3-center w3-opacity">  
+  <div class="w3-xlarge w3-padding-32">
+    <a href="https://www.linkedin.com/in/danicnts7" target="_blank"><i class="fa fa-linkedin w3-hover-opacity"></i></a>
+    <a href="https://github.com/DaniCnTs7" target="_blank"><i class="fa fa-github w3-hover-opacity"></i></a>
+    <a href="mailto:dcantosgarcia@gmail.com"><i class="fa fa-envelope w3-hover-opacity"></i></a>
+ </div>
+ <p>Realizado por<a href="https://github.com/DaniCnTs7/uno" target="_blank"> Daniel Cantos García</a></p>
 </footer>
-
 </body>
 </html>
