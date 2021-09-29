@@ -68,4 +68,14 @@ describe("El juego del UNO...", function() {
     expect(window.alert).toHaveBeenCalledWith("La partida ya ha comenzado")
   });
 
+  it("Obtenemos todas las partidas correctamente", function() {
+    var j1 = juego.usuarios["pepe"]
+
+    j1.crearPartida(2)
+
+    var listaPartidas = juego.obtenerTodasPartidas()
+
+    expect(listaPartidas.length).toEqual(1)
+  });
+
 });
