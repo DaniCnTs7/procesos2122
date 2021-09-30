@@ -8,24 +8,10 @@ describe("El juego del UNO...", function() {
     juego.agregarJugadores("maria")
   });
 
-  it("Condiciones iniciales", function() {
-    //TODO
-  })
-
-  describe("Ana crea una partida de 2 jugadores...", function() {
-    var ju1
-    var partida
-
-    beforeEach(function() {
-      ju1 = juego.usuarios["ana"]
-      partida = ju1.crearPartida(2)
-    })
-  })
-
-  // it("Comprobamos la partida para dos jugadores", function() {
-  //   var ju1 = juego.usuarios["ana"]
-  //   expect(juego.numeroPartidas()).toEqual(0);
-  //   var partida = ju1.crearPartida(2)
+  it("Ana crea una partida para dos jugadores", function() {
+    var ju1 = juego.usuarios["ana"]
+    expect(juego.numeroPartidas()).toEqual(0);
+    var partida = ju1.crearPartida(2)
 
     expect(partida.codigo).toBeDefined()
     //Comprobamos que la partida se haya creado correctamente
@@ -38,32 +24,32 @@ describe("El juego del UNO...", function() {
     expect(partida.fase.nombre).toBe("inicial")
   });
 
-  it("Pepe se une a ella", function() {
-    // var ju1 = juego.usuarios["ana"]
-    // expect(juego.numeroPartidas()).toEqual(0);
-    // var partida = ju1.crearPartida(2)
+  it("Ana crea la partida para dos jugadores y pepe se une a ella", function() {
+    var ju1 = juego.usuarios["ana"]
+    expect(juego.numeroPartidas()).toEqual(0);
+    var partida = ju1.crearPartida(2)
 
-    // expect(partida.codigo).toBeDefined()
-    // expect(partida.propietario).toEqual("ana")
+    expect(partida.codigo).toBeDefined()
+    expect(partida.propietario).toEqual("ana")
 
     var ju2 = juego.usuarios["pepe"]
     ju2.unirAPartida(partida.codigo, "pepe")
 
-    // expect(partida.codigo).toBeDefined()
+    expect(partida.codigo).toBeDefined()
     //Comprobamos que el número de jugadores es igual a dos
     expect(partida.numeroJugadores()).toEqual(2)
     //Comprobamos que la fase cambia a jugando
     expect(partida.fase.nombre).toBe("jugando")
   });
 
-  it("Pepe se une a ella y maría intenta unirse pero no puede", function() {
+  it("Ana crea la partida para dos jugadores, pepe se une a ella y maría intenta unirse pero no puede", function() {
     spyOn(window, 'alert');
-    // var ju1 = juego.usuarios["ana"]
-    // expect(juego.numeroPartidas()).toEqual(0);
-    // var partida = ju1.crearPartida(2)
+    var ju1 = juego.usuarios["ana"]
+    expect(juego.numeroPartidas()).toEqual(0);
+    var partida = ju1.crearPartida(2)
 
-    // expect(partida.codigo).toBeDefined()
-    // expect(partida.propietario).toEqual("ana")
+    expect(partida.codigo).toBeDefined()
+    expect(partida.propietario).toEqual("ana")
 
     //pepe se une a la partida
     var ju2 = juego.usuarios["pepe"]
@@ -88,11 +74,10 @@ describe("El juego del UNO...", function() {
 
     j1.crearPartida(2)
     j2.crearPartida(4)
-    j2.crearPartida(3)
 
     var listaPartidas = juego.obtenerTodasPartidas()
 
-    expect(listaPartidas.length).toEqual(3)
+    expect(listaPartidas.length).toEqual(2)
   });
 
   it("Comprobar mazo",function(){
