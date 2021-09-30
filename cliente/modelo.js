@@ -20,7 +20,7 @@ function Juego() {
         while(this.partidas[codigo]) {
             codigo = this.obtenerCodigo()
         }
-        
+        jugador.codigoPartida = codigo
         //crear la instancia de partida
         var partida = new Partida(codigo, jugador, numJugadores)
         //asignarla a la colección partidas
@@ -43,6 +43,10 @@ function Juego() {
         return lista
     }
 
+    this.obtenerPartida = function(codigo) {
+        return this.partidas[codigo]
+    }
+
     this.unirAPartida = function(codigo, nick) {
         if (this.partidas[codigo]) {
             var jugador = this.usuarios[nick]
@@ -51,14 +55,16 @@ function Juego() {
     }
 
     this.obtenerCodigo = function() {
-        // let cadena="ABCDEFGHIJKLMNOPQRSTUVXYZ";
-        // let letras=cadena.split('');
-        // let maxCadena=cadena.length;
-        // let codigo=[];
-        // for(i=0;i<6;i++){
-        //     codigo.push(letras[randomInt(1,maxCadena)-1]);
-        // }
-        return Date.now().toString()
+        let cadena="ABCDEFGHIJKLMNOPQRSTUVXYZ";
+        let letras=cadena.split('');
+        let maxCadena=cadena.length;
+        let codigo=[];
+        for(i=0;i<6;i++){
+            codigo.push(letras[randomInt(1,maxCadena)-1]);
+        }
+
+        return codigo
+        // return Date.now().toString()
     }
 
     this.numeroPartidas = function() {
@@ -75,6 +81,8 @@ function randomInt(low, high) {
 function Jugador(nick, juego) {
     this.nick = nick
     this.juego = juego
+    this.mano = []
+    this.codigoPartida
 
     this.crearPartida = function(numJugadores) {
         return this.juego.crearPartida(nick, numJugadores)
@@ -82,6 +90,25 @@ function Jugador(nick, juego) {
 
     this.unirAPartida = function(codigo, nick=this.nick) {
         this.juego.unirAPartida(codigo, nick)
+    }
+
+    this.dameCartas = function(num) {
+        var partida = this.obtenerPartida(this.codigoPartida)
+        this.mano.push(...partida.dameCartas(num))
+    }
+
+    this.robar = function(num) {
+        var partida = this.obtenerPartida(this.codigoPartida)
+        this.mano = this.mano.concat(partida.dameCartas(num))
+    }
+
+    this.manoInicial = function() {
+        var partida = this.obtenerPartida(this.codigoPartida)
+        this.mano = partida.dameCartas(7)
+    }
+
+    this.obtenerPartida = function(codigo) {
+        return this.juego.obtenerPartida(codigo)
     }
 }
 
@@ -91,13 +118,14 @@ function Partida(codigo, propietario, numJugadores) {
     this.numJugadores = numJugadores
     this.jugadores = {}
     this.fase = new Inicial()
-    this.cartas = []
+    this.mazo = []
 
     this.unirAPartida = function (jugador) {
         this.fase.unirAPartida(this, jugador)
     }
     this.puedeUnirAPartida = function(jugador) {
         this.jugadores[jugador.nick] = jugador
+        jugador.codigoPartida = this.codigo
     }
 
     this.numeroJugadores = function() {
@@ -105,51 +133,68 @@ function Partida(codigo, propietario, numJugadores) {
     }
 
     this.obtenerMazo = function() {
-        return this.cartas
+        return this.mazo
     }
 
     this.crearMazo = function() {
         var colores = ['azul', 'amarillo', 'rojo', 'verde']
         //Se crean 76 cartas. Del 0 al 9 de cada color. 1 al 9 dos por cada color
         for(i = 0;i<colores.length;i++) {
-            this.cartas.push(new Numero(0,colores[i]))
+            this.mazo.push(new Numero(0,colores[i]))
             for(j = 1;j<10;j++) {
-                this.cartas.push(new Numero(j,colores[i]))
-                this.cartas.push(new Numero(j,colores[i]))
+                this.mazo.push(new Numero(j,colores[i]))
+                this.mazo.push(new Numero(j,colores[i]))
             }
         }
 
         //Crear carta de bloqueo
         //Valor 10 para las cartas de bloqueo
         for(i = 0; i < colores.length; i++) {
-            this.cartas.push(new Numero(10, colores[i], 'bloqueo'))
-            this.cartas.push(new Numero(10, colores[i], 'bloqueo'))
+            this.mazo.push(new Numero(10, colores[i], 'bloqueo'))
+            this.mazo.push(new Numero(10, colores[i], 'bloqueo'))
         }
 
         //Crear carta de cambio de sentido
         //Valor 11 para las cartas de cambio de sentido
         for(i = 0; i < colores.length; i++) {
-            this.cartas.push(new Numero(11, colores[i], 'sentido'))
-            this.cartas.push(new Numero(11, colores[i], 'sentido'))
+            this.mazo.push(new Numero(11, colores[i], 'sentido'))
+            this.mazo.push(new Numero(11, colores[i], 'sentido'))
         }
 
         //Crear 8 cartas mas2 de cada color
         //Valor 20 para cada una
         for(i = 0; i < colores.length; i++) {
-            this.cartas.push(new Numero(20, colores[i], 'mas2'))
-            this.cartas.push(new Numero(20, colores[i], 'mas2'))
+            this.mazo.push(new Numero(20, colores[i], 'mas2'))
+            this.mazo.push(new Numero(20, colores[i], 'mas2'))
         }
 
         //Crear comodines y comodines+4
         for(i = 0; i < 4; i++) {
-            this.cartas.push(new Numero(50, undefined, 'comodin'))
+            this.mazo.push(new Numero(50, undefined, 'comodin'))
         }
 
         for(i = 0; i < 4; i++) {
-            this.cartas.push(new Numero(100, undefined, 'comodin4'))
+            this.mazo.push(new Numero(100, undefined, 'comodin4'))
         }
 
     }
+
+    this.dameCartas = function(num) {
+        var cartas = []
+        for(i=0;i<num;i++) {
+            cartas.push(this.asignarUnaCarta())
+        }
+        return cartas
+    }
+
+
+    this.asignarUnaCarta = function() {
+        var longitudMazo = this.mazo.length
+        var random = Math.random() * (longitudMazo - 0) + 0
+        var carta = this.mazo.splice(random, 1)
+        return carta[0]
+    }
+
     this.crearMazo()
     this.unirAPartida(propietario)
 }

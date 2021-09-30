@@ -8,10 +8,24 @@ describe("El juego del UNO...", function() {
     juego.agregarJugadores("maria")
   });
 
-  it("Ana crea una partida para dos jugadores", function() {
-    var ju1 = juego.usuarios["ana"]
-    expect(juego.numeroPartidas()).toEqual(0);
-    var partida = ju1.crearPartida(2)
+  it("Condiciones iniciales", function() {
+    //TODO
+  })
+
+  describe("Ana crea una partida de 2 jugadores...", function() {
+    var ju1
+    var partida
+
+    beforeEach(function() {
+      ju1 = juego.usuarios["ana"]
+      partida = ju1.crearPartida(2)
+    })
+  })
+
+  // it("Comprobamos la partida para dos jugadores", function() {
+  //   var ju1 = juego.usuarios["ana"]
+  //   expect(juego.numeroPartidas()).toEqual(0);
+  //   var partida = ju1.crearPartida(2)
 
     expect(partida.codigo).toBeDefined()
     //Comprobamos que la partida se haya creado correctamente
@@ -24,32 +38,32 @@ describe("El juego del UNO...", function() {
     expect(partida.fase.nombre).toBe("inicial")
   });
 
-  it("Ana crea la partida para dos jugadores y pepe se une a ella", function() {
-    var ju1 = juego.usuarios["ana"]
-    expect(juego.numeroPartidas()).toEqual(0);
-    var partida = ju1.crearPartida(2)
+  it("Pepe se une a ella", function() {
+    // var ju1 = juego.usuarios["ana"]
+    // expect(juego.numeroPartidas()).toEqual(0);
+    // var partida = ju1.crearPartida(2)
 
-    expect(partida.codigo).toBeDefined()
-    expect(partida.propietario).toEqual("ana")
+    // expect(partida.codigo).toBeDefined()
+    // expect(partida.propietario).toEqual("ana")
 
     var ju2 = juego.usuarios["pepe"]
     ju2.unirAPartida(partida.codigo, "pepe")
 
-    expect(partida.codigo).toBeDefined()
+    // expect(partida.codigo).toBeDefined()
     //Comprobamos que el número de jugadores es igual a dos
     expect(partida.numeroJugadores()).toEqual(2)
     //Comprobamos que la fase cambia a jugando
     expect(partida.fase.nombre).toBe("jugando")
   });
 
-  it("Ana crea la partida para dos jugadores, pepe se une a ella y maría intenta unirse pero no puede", function() {
+  it("Pepe se une a ella y maría intenta unirse pero no puede", function() {
     spyOn(window, 'alert');
-    var ju1 = juego.usuarios["ana"]
-    expect(juego.numeroPartidas()).toEqual(0);
-    var partida = ju1.crearPartida(2)
+    // var ju1 = juego.usuarios["ana"]
+    // expect(juego.numeroPartidas()).toEqual(0);
+    // var partida = ju1.crearPartida(2)
 
-    expect(partida.codigo).toBeDefined()
-    expect(partida.propietario).toEqual("ana")
+    // expect(partida.codigo).toBeDefined()
+    // expect(partida.propietario).toEqual("ana")
 
     //pepe se une a la partida
     var ju2 = juego.usuarios["pepe"]
@@ -74,10 +88,11 @@ describe("El juego del UNO...", function() {
 
     j1.crearPartida(2)
     j2.crearPartida(4)
+    j2.crearPartida(3)
 
     var listaPartidas = juego.obtenerTodasPartidas()
 
-    expect(listaPartidas.length).toEqual(2)
+    expect(listaPartidas.length).toEqual(3)
   });
 
   it("Comprobar mazo",function(){
@@ -85,28 +100,28 @@ describe("El juego del UNO...", function() {
     var ju1 = juego.usuarios["ana"]
     var partida = ju1.crearPartida(2)
 
-    expect(partida.cartas.length).toBe(108);
-        var rojo=partida.cartas.filter(function(each){
+    expect(partida.mazo.length).toBe(108);
+        var rojo=partida.mazo.filter(function(each){
           return each.color=="rojo";
         });
         expect(rojo.length).toBe(25);
-        var verde=partida.cartas.filter(function(each){
+        var verde=partida.mazo.filter(function(each){
           return each.color=="rojo";
         });
         expect(verde.length).toBe(25);
-        var amarillo=partida.cartas.filter(function(each){
+        var amarillo=partida.mazo.filter(function(each){
           return each.color=="rojo";
         });
         expect(amarillo.length).toBe(25);
-        var azul=partida.cartas.filter(function(each){
+        var azul=partida.mazo.filter(function(each){
           return each.color=="rojo";
         });
         expect(azul.length).toBe(25);
-        var comodin=partida.cartas.filter(function(each){
+        var comodin=partida.mazo.filter(function(each){
           return each.tipo=="comodin";
         });
         expect(comodin.length).toBe(4);
-        var comodin4=partida.cartas.filter(function(each){
+        var comodin4=partida.mazo.filter(function(each){
           return each.tipo=="comodin4";
         });
         expect(comodin4.length).toBe(4);
