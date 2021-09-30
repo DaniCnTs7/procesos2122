@@ -17,9 +17,9 @@ function Juego() {
         var codigo = "-1"
         var jugador = this.usuarios[nick]
         codigo = this.obtenerCodigo()
-        // while(this.partidas[codigo]) {
-        //     codigo = this.obtenerCodigo()
-        // }
+        while(this.partidas[codigo]) {
+            codigo = this.obtenerCodigo()
+        }
         
         //crear la instancia de partida
         var partida = new Partida(codigo, jugador, numJugadores)
@@ -36,7 +36,8 @@ function Juego() {
             var partida = this.partidas[each]
             lista.push({
                 propietario: partida.propietario,
-                codigo: each
+                codigo: each,
+                numjugadores: partida.numeroJugadores() +'/'+partida.numJugadores
             })
         }
         return lista
@@ -79,7 +80,7 @@ function Jugador(nick, juego) {
         return this.juego.crearPartida(nick, numJugadores)
     }
 
-    this.unirAPartida = function(codigo, nick) {
+    this.unirAPartida = function(codigo, nick=this.nick) {
         this.juego.unirAPartida(codigo, nick)
     }
 }
@@ -103,8 +104,13 @@ function Partida(codigo, propietario, numJugadores) {
         return Object.keys(this.jugadores).length
     }
 
+    this.obtenerMazo = function() {
+        return this.cartas
+    }
+
     this.crearMazo = function() {
         var colores = ['azul', 'amarillo', 'rojo', 'verde']
+        //Se crean 76 cartas. Del 0 al 9 de cada color. 1 al 9 dos por cada color
         for(i = 0;i<colores.length;i++) {
             this.cartas.push(new Numero(0,colores[i]))
             for(j = 1;j<10;j++) {
@@ -112,6 +118,37 @@ function Partida(codigo, propietario, numJugadores) {
                 this.cartas.push(new Numero(j,colores[i]))
             }
         }
+
+        //Crear carta de bloqueo
+        //Valor 10 para las cartas de bloqueo
+        for(i = 0; i < colores.length; i++) {
+            this.cartas.push(new Numero(10, colores[i], 'bloqueo'))
+            this.cartas.push(new Numero(10, colores[i], 'bloqueo'))
+        }
+
+        //Crear carta de cambio de sentido
+        //Valor 11 para las cartas de cambio de sentido
+        for(i = 0; i < colores.length; i++) {
+            this.cartas.push(new Numero(11, colores[i], 'sentido'))
+            this.cartas.push(new Numero(11, colores[i], 'sentido'))
+        }
+
+        //Crear 8 cartas mas2 de cada color
+        //Valor 20 para cada una
+        for(i = 0; i < colores.length; i++) {
+            this.cartas.push(new Numero(20, colores[i], 'mas2'))
+            this.cartas.push(new Numero(20, colores[i], 'mas2'))
+        }
+
+        //Crear comodines y comodines+4
+        for(i = 0; i < 4; i++) {
+            this.cartas.push(new Numero(50, undefined, 'comodin'))
+        }
+
+        for(i = 0; i < 4; i++) {
+            this.cartas.push(new Numero(100, undefined, 'comodin4'))
+        }
+
     }
     this.crearMazo()
     this.unirAPartida(propietario)
@@ -147,7 +184,8 @@ function Final() {
 }
 
 
-function Numero(valor, color) {
+function Numero(valor, color = "nocolor", tipo = "numero") {
     this.color = color
     this.valor = valor
+    this.tipo = tipo
 }

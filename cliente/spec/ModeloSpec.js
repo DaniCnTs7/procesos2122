@@ -70,12 +70,49 @@ describe("El juego del UNO...", function() {
 
   it("Obtenemos todas las partidas correctamente", function() {
     var j1 = juego.usuarios["pepe"]
+    var j2 = juego.usuarios["ana"]
 
     j1.crearPartida(2)
+    j2.crearPartida(4)
 
     var listaPartidas = juego.obtenerTodasPartidas()
 
-    expect(listaPartidas.length).toEqual(1)
+    expect(listaPartidas.length).toEqual(2)
   });
+
+  it("Comprobar mazo",function(){
+    //codigo para crear partida
+    var ju1 = juego.usuarios["ana"]
+    var partida = ju1.crearPartida(2)
+
+    expect(partida.cartas.length).toBe(108);
+        var rojo=partida.cartas.filter(function(each){
+          return each.color=="rojo";
+        });
+        expect(rojo.length).toBe(25);
+        var verde=partida.cartas.filter(function(each){
+          return each.color=="rojo";
+        });
+        expect(verde.length).toBe(25);
+        var amarillo=partida.cartas.filter(function(each){
+          return each.color=="rojo";
+        });
+        expect(amarillo.length).toBe(25);
+        var azul=partida.cartas.filter(function(each){
+          return each.color=="rojo";
+        });
+        expect(azul.length).toBe(25);
+        var comodin=partida.cartas.filter(function(each){
+          return each.tipo=="comodin";
+        });
+        expect(comodin.length).toBe(4);
+        var comodin4=partida.cartas.filter(function(each){
+          return each.tipo=="comodin4";
+        });
+        expect(comodin4.length).toBe(4);
+      });
+
+
+
 
 });
