@@ -80,6 +80,11 @@ describe("El juego del UNO...", function() {
     expect(listaPartidas.length).toEqual(2)
   });
 
+  // it("Comprobar obtener partida", function() {
+  //   var codigo = ju1.codigoPartida
+  //   ju1.obtenerPartida(codigo)
+  // })
+
   it("Comprobar mazo",function(){
     //codigo para crear partida
     var ju1 = juego.usuarios["ana"]
@@ -91,23 +96,27 @@ describe("El juego del UNO...", function() {
         });
         expect(rojo.length).toBe(25);
         var verde=partida.mazo.filter(function(each){
-          return each.color=="rojo";
+          return each.color=="verde";
         });
         expect(verde.length).toBe(25);
         var amarillo=partida.mazo.filter(function(each){
-          return each.color=="rojo";
+          return each.color=="amarillo";
         });
         expect(amarillo.length).toBe(25);
         var azul=partida.mazo.filter(function(each){
-          return each.color=="rojo";
+          return each.color=="azul";
         });
         expect(azul.length).toBe(25);
         var comodin=partida.mazo.filter(function(each){
-          return each.tipo=="comodin";
+          return each.tipo=="cambiocolor";
         });
         expect(comodin.length).toBe(4);
+        var comodin2=partida.mazo.filter(function(each){
+          return each.tipo=="mas2";
+        });
+        expect(comodin2.length).toBe(8);
         var comodin4=partida.mazo.filter(function(each){
-          return each.tipo=="comodin4";
+          return each.tipo=="mas4";
         });
         expect(comodin4.length).toBe(4);
       });

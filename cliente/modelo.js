@@ -150,31 +150,31 @@ function Partida(codigo, propietario, numJugadores) {
         //Crear carta de bloqueo
         //Valor 10 para las cartas de bloqueo
         for(i = 0; i < colores.length; i++) {
-            this.mazo.push(new Numero(10, colores[i], 'bloqueo'))
-            this.mazo.push(new Numero(10, colores[i], 'bloqueo'))
+            this.mazo.push(new Bloqueo(colores[i]))
+            this.mazo.push(new Bloqueo(colores[i]))
         }
 
         //Crear carta de cambio de sentido
         //Valor 11 para las cartas de cambio de sentido
         for(i = 0; i < colores.length; i++) {
-            this.mazo.push(new Numero(11, colores[i], 'sentido'))
-            this.mazo.push(new Numero(11, colores[i], 'sentido'))
+            this.mazo.push(new Sentido(colores[i]))
+            this.mazo.push(new Sentido(colores[i]))
         }
 
         //Crear 8 cartas mas2 de cada color
         //Valor 20 para cada una
         for(i = 0; i < colores.length; i++) {
-            this.mazo.push(new Numero(20, colores[i], 'mas2'))
-            this.mazo.push(new Numero(20, colores[i], 'mas2'))
+            this.mazo.push(new Mas2(colores[i]))
+            this.mazo.push(new Mas2(colores[i]))
         }
 
         //Crear comodines y comodines+4
         for(i = 0; i < 4; i++) {
-            this.mazo.push(new Numero(50, undefined, 'comodin'))
+            this.mazo.push(new CambioColor())
         }
 
         for(i = 0; i < 4; i++) {
-            this.mazo.push(new Numero(100, undefined, 'comodin4'))
+            this.mazo.push(new Mas4())
         }
 
     }
@@ -233,4 +233,32 @@ function Numero(valor, color = "nocolor", tipo = "numero") {
     this.color = color
     this.valor = valor
     this.tipo = tipo
+}
+
+function Bloqueo(color, tipo = "bloqueo") {
+    this.color = color
+    this.tipo = tipo
+    this.valor = 10
+}
+
+function Sentido(color, tipo = "sentido") {
+    this.color = color
+    this.tipo = tipo
+    this.valor = 15
+}
+
+function CambioColor(tipo = "cambiocolor") {
+    this.tipo = tipo
+    this.valor = 40
+}
+
+function Mas2(color, tipo = "mas2") {
+    this.tipo = tipo
+    this.color = color
+    this.valor = 20
+}
+
+function Mas4(tipo = "mas4") {
+    this.tipo = tipo
+    this.valor = 50
 }
