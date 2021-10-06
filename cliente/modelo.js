@@ -116,6 +116,13 @@ function Jugador(nick, juego) {
         partida.pasarTurno()
     }
 
+    this.jugarCarta = function(carta) {
+        var partida = this.obtenerPartida(this.codigoPartida)
+        var index = this.mano.indexOf(carta)
+        this.mano.splice(index, 1)
+        return partida.jugarCarta(carta)
+    }
+
 }
 
 function Partida(codigo, propietario, numJugadores) {
@@ -128,6 +135,7 @@ function Partida(codigo, propietario, numJugadores) {
     this.nombresJug = []
     this.ronda = 0
     this.turno = undefined
+    this.mesa = []
 
     this.unirAPartida = function (jugador) {
         this.fase.unirAPartida(this, jugador)
@@ -220,7 +228,20 @@ function Partida(codigo, propietario, numJugadores) {
         }
     }
 
+    this.cartaInicial = function() {
+        var longitudMazo = this.mazo.length
+        var random = Math.random() * (longitudMazo - 0) + 0
+        var carta = this.mazo.splice(random, 1)
+        this.mesa.push(carta[0])
+    }
+
+    this.jugarCarta = function(carta) {
+        this.mesa.push(carta)
+        return this.mesa
+    }
+
     this.crearMazo()
+    this.cartaInicial()
     this.turnoInicial()
     this.unirAPartida(propietario)
 }
