@@ -113,14 +113,18 @@ function Jugador(nick, juego) {
 
     this.pasarTurno = function() {
         var partida = this.obtenerPartida(this.codigoPartida)
-        partida.pasarTurno()
+        partida.pasarTurno(this.nick)
     }
 
     this.jugarCarta = function(carta) {
         var partida = this.obtenerPartida(this.codigoPartida)
         var index = this.mano.indexOf(carta)
-        this.mano.splice(index, 1)
-        return partida.jugarCarta(carta)
+        if (this.nick == partida.turno.nick) {
+            this.mano.splice(index, 1)
+            partida.jugarCarta(carta)
+        } else {
+            alert("No es tu turno")
+        }
     }
 
 }
@@ -218,13 +222,17 @@ function Partida(codigo, propietario, numJugadores) {
         this.turno = propietario
     }
 
-    this.pasarTurno = function() {
-        if(this.ronda < this.numeroJugadores()-1) {
-            this.ronda += 1
-            this.turno = this.jugadores[this.nombresJug[this.ronda]]
+    this.pasarTurno = function(nick) {
+        if(nick == this.turno.nick) {
+            if(this.ronda < this.numeroJugadores()-1) {
+                this.ronda += 1
+                this.turno = this.jugadores[this.nombresJug[this.ronda]]
+            } else {
+                this.ronda += 1
+                this.turno = this.jugadores[this.nombresJug[this.ronda%this.numeroJugadores()]]
+            }
         } else {
-            this.ronda += 1
-            this.turno = this.jugadores[this.nombresJug[this.ronda%this.numeroJugadores()]]
+            alert("No es tu turno")
         }
     }
 
@@ -235,9 +243,12 @@ function Partida(codigo, propietario, numJugadores) {
         this.mesa.push(carta[0])
     }
 
+    this.cartaActual = function() {
+        return this.mesa[this.mesa.length-1]
+    }
+
     this.jugarCarta = function(carta) {
         this.mesa.push(carta)
-        return this.mesa
     }
 
     this.crearMazo()
