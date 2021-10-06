@@ -110,6 +110,12 @@ function Jugador(nick, juego) {
     this.obtenerPartida = function(codigo) {
         return this.juego.obtenerPartida(codigo)
     }
+
+    this.pasarTurno = function() {
+        var partida = this.obtenerPartida(this.codigoPartida)
+        partida.pasarTurno()
+    }
+
 }
 
 function Partida(codigo, propietario, numJugadores) {
@@ -119,12 +125,16 @@ function Partida(codigo, propietario, numJugadores) {
     this.jugadores = {}
     this.fase = new Inicial()
     this.mazo = []
+    this.nombresJug = []
+    this.ronda = 0
+    this.turno = undefined
 
     this.unirAPartida = function (jugador) {
         this.fase.unirAPartida(this, jugador)
     }
     this.puedeUnirAPartida = function(jugador) {
         this.jugadores[jugador.nick] = jugador
+        this.nombresJug.push(jugador.nick)
         jugador.codigoPartida = this.codigo
     }
 
@@ -145,6 +155,7 @@ function Partida(codigo, propietario, numJugadores) {
                 this.mazo.push(new Numero(j,colores[i]))
                 this.mazo.push(new Numero(j,colores[i]))
             }
+            
         }
 
         //Crear carta de bloqueo
@@ -195,7 +206,22 @@ function Partida(codigo, propietario, numJugadores) {
         return carta[0]
     }
 
+    this.turnoInicial = function() {
+        this.turno = propietario
+    }
+
+    this.pasarTurno = function() {
+        if(this.ronda < this.numeroJugadores()-1) {
+            this.ronda += 1
+            this.turno = this.jugadores[this.nombresJug[this.ronda]]
+        } else {
+            this.ronda += 1
+            this.turno = this.jugadores[this.nombresJug[this.ronda%this.numeroJugadores()]]
+        }
+    }
+
     this.crearMazo()
+    this.turnoInicial()
     this.unirAPartida(propietario)
 }
 
