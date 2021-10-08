@@ -116,15 +116,22 @@ function Jugador(nick, juego) {
         partida.pasarTurno(this.nick)
     }
 
-    this.jugarCarta = function(carta) {
+    this.jugarCarta = function(num) {
         var partida = this.obtenerPartida(this.codigoPartida)
-        var index = this.mano.indexOf(carta)
         if (this.nick == partida.turno.nick) {
-            this.mano.splice(index, 1)
-            partida.jugarCarta(carta)
-            partida.pasarTurno(this.nick)
+            var carta = this.mano[num]
+            partida.jugarCarta(carta, this.nick)
         } else {
             alert("No es tu turno")
+        }
+    }
+
+    this.quitarCarta = function(carta) {
+        var partida = this.obtenerPartida(this.codigoPartida)
+        var indice = this.mano.indexOf(carta)
+        this.mano.splice(indice, 1)
+        if(this.mano.length <= 0) {
+            partida.finPartida()
         }
     }
 
@@ -139,7 +146,7 @@ function Partida(codigo, propietario, numJugadores) {
     this.mazo = []
     this.nombresJug = []
     this.ronda = 1
-    this.turno = undefined
+    this.turno
     this.mesa = []
 
     this.unirAPartida = function (jugador) {
@@ -164,49 +171,55 @@ function Partida(codigo, propietario, numJugadores) {
         //Se crean 76 cartas. Del 0 al 9 de cada color. 1 al 9 dos por cada color
         for(i = 0;i<colores.length;i++) {
             this.mazo.push(new Numero(0,colores[i]))
-            for(j = 1;j<10;j++) {
+            for(j = 1;j<5;j++) {
                 this.mazo.push(new Numero(j,colores[i]))
-                this.mazo.push(new Numero(j,colores[i]))
+                // this.mazo.push(new Numero(j,colores[i]))
             }
             
         }
 
         //Crear carta de bloqueo
         //Valor 10 para las cartas de bloqueo
-        for(i = 0; i < colores.length; i++) {
-            this.mazo.push(new Bloqueo(colores[i]))
-            this.mazo.push(new Bloqueo(colores[i]))
-        }
+        // for(i = 0; i < colores.length; i++) {
+        //     this.mazo.push(new Bloqueo(colores[i]))
+        //     this.mazo.push(new Bloqueo(colores[i]))
+        // }
 
         //Crear carta de cambio de sentido
         //Valor 11 para las cartas de cambio de sentido
         for(i = 0; i < colores.length; i++) {
             this.mazo.push(new Sentido(colores[i]))
-            this.mazo.push(new Sentido(colores[i]))
+            // this.mazo.push(new Sentido(colores[i]))
         }
 
         //Crear 8 cartas mas2 de cada color
         //Valor 20 para cada una
-        for(i = 0; i < colores.length; i++) {
-            this.mazo.push(new Mas2(colores[i]))
-            this.mazo.push(new Mas2(colores[i]))
-        }
+        // for(i = 0; i < colores.length; i++) {
+        //     this.mazo.push(new Mas2(colores[i]))
+        //     this.mazo.push(new Mas2(colores[i]))
+        // }
 
-        //Crear comodines y comodines+4
-        for(i = 0; i < 4; i++) {
-            this.mazo.push(new CambioColor())
-        }
+        // //Crear comodines y comodines+4
+        // for(i = 0; i < 4; i++) {
+        //     this.mazo.push(new CambioColor())
+        // }
 
-        for(i = 0; i < 4; i++) {
-            this.mazo.push(new Mas4())
-        }
+        // for(i = 0; i < 4; i++) {
+        //     this.mazo.push(new Mas4())
+        // }
 
     }
 
     this.dameCartas = function(num) {
         var cartas = []
         for(i=0;i<num;i++) {
-            cartas.push(this.asignarUnaCarta())
+            var carta = this.asignarUnaCarta()
+            if(carta) {
+                cartas.push(carta)
+            } else {
+                var tamMesa = this.mesa.length
+                console.log(this.mesa.splice(0,tamMesa-2))
+            }
         }
         return cartas
     }
@@ -214,9 +227,13 @@ function Partida(codigo, propietario, numJugadores) {
 
     this.asignarUnaCarta = function() {
         var longitudMazo = this.mazo.length
-        var random = Math.random() * (longitudMazo - 0) + 0
-        var carta = this.mazo.splice(random, 1)
-        return carta[0]
+        var res
+        if (longitudMazo>0) {
+            var random = Math.random() * (longitudMazo - 0) + 0
+            var carta = this.mazo.splice(random, 1)
+            res = carta[0]
+        }
+        return res
     }
 
     this.turnoInicial = function() {
@@ -224,6 +241,10 @@ function Partida(codigo, propietario, numJugadores) {
     }
 
     this.pasarTurno = function(nick) {
+        this.fase.pasarTurno(nick, this)
+    }
+
+    this.puedePasarTurno = function(nick) {
         if(nick == this.turno.nick) {
             this.ronda += 1
             var indice = (this.nombresJug.indexOf(this.turno.nick) + 1) % this.numeroJugadores()
@@ -242,18 +263,43 @@ function Partida(codigo, propietario, numJugadores) {
     }
 
     this.cartaInicial = function() {
-        var longitudMazo = this.mazo.length
-        var random = Math.random() * (longitudMazo - 0) + 0
-        var carta = this.mazo.splice(random, 1)
-        this.mesa.push(carta[0])
+        var carta = this.asignarUnaCarta()
+        this.mesa.push(carta)
     }
 
     this.cartaActual = function() {
-        return this.mesa[this.mesa.length-1]
+        var tam = this.mesa.length
+        return this.mesa[tam-1]     
     }
 
-    this.jugarCarta = function(carta) {
-        this.mesa.push(carta)
+    this.jugarCarta = function(carta, nick) {
+        this.fase.jugarCarta(carta, nick, this)
+    }
+
+    this.puedeJugarCarta = function(carta,nick) {
+        if(nick == this.turno.nick) {
+            if(this.comprobarCarta(carta)) {
+                var jugador = this.turno
+                jugador.quitarCarta(carta)
+                carta.comprobarEfecto(this)
+                this.mesa.push(carta)
+                this.pasarTurno(nick)
+            }
+        }
+    }
+
+    this.comprobarCarta=function(carta){
+        var cartaActual = this.cartaActual()
+        return (cartaActual.tipo=="numero" && (cartaActual.color==carta.color || cartaActual.valor==carta.valor)
+            || cartaActual.tipo=="cambio" && (cartaActual.color==carta.color || cartaActual.tipo == carta.tipo))
+    }
+
+    this.finPartida = function() {
+        this.fase = new Final()
+    }
+
+    this.cambiarSentido = function() {
+        this.nombresJug = this.nombresJug.reverse()
     }
 
     this.crearMazo()
@@ -270,16 +316,36 @@ function Inicial() {
         //si num jugadores < numJugadores
         partida.puedeUnirAPartida(jugador)
         if (partida.numJugadores==partida.numeroJugadores()) {
+            var jugadores = partida.jugadores
+            for(var jug in jugadores) {
+                jugadores[jug].manoInicial()
+            }
             partida.fase = new Jugando()
         }
+    }
+
+    this.pasarTurno = function(nick, partida) {
+        alert("La partida no ha comenzado")
+    }
+
+    this.jugarCarta = function(carta, nick, partida) {
+        alert("La partida no ha comenzado")
     }
 }
 
 function Jugando() {
     this.nombre = "jugando"
-    
+
     this.unirAPartida = function(partida, jugador) {
         alert("La partida ya ha comenzado")
+    }
+
+    this.pasarTurno = function(nick, partida) {
+        partida.puedePasarTurno(nick)
+    }
+
+    this.jugarCarta = function(carta, nick, partida) {
+        partida.puedeJugarCarta(carta, nick)
     }
 }
 
@@ -289,6 +355,14 @@ function Final() {
     this.unirAPartida = function(partida, jugador) {
         alert("La partida ha terminado")
     }
+
+    this.pasarTurno = function(nick, partida) {
+        alert("La partida ha terminado")
+    }
+
+    this.jugarCarta = function(carta, nick, partida) {
+        alert("La partida ha terminado")
+    }
 }
 
 
@@ -296,32 +370,56 @@ function Numero(valor, color = "nocolor", tipo = "numero") {
     this.color = color
     this.valor = valor
     this.tipo = tipo
+
+    this.comprobarEfecto = function(partida) {
+        console.log("No tiene efecto")
+    }
 }
 
 function Bloqueo(color, tipo = "bloqueo") {
     this.color = color
     this.tipo = tipo
     this.valor = 10
+
+    this.comprobarEfecto = function(partida) {
+        console.log("BLOQUEO")
+    }
 }
 
 function Sentido(color, tipo = "sentido") {
     this.color = color
     this.tipo = tipo
     this.valor = 15
+
+    this.comprobarEfecto = function(partida) {
+        partida.cambiarSentido()
+    }
 }
 
 function CambioColor(tipo = "cambiocolor") {
     this.tipo = tipo
     this.valor = 40
+
+    this.comprobarEfecto = function(partida) {
+        console.log("CAMBIO COLOR")
+    }
 }
 
 function Mas2(color, tipo = "mas2") {
     this.tipo = tipo
     this.color = color
     this.valor = 20
+
+    this.comprobarEfecto = function(partida) {
+        console.log("CHUPATE DOS")
+    }
 }
 
 function Mas4(tipo = "mas4") {
     this.tipo = tipo
     this.valor = 50
+
+    this.comprobarEfecto = function(partida) {
+        console.log("CHUPATE CUATRO")
+    }
 }
