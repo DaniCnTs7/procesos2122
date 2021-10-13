@@ -449,3 +449,5 @@ function Mas4(tipo = "mas4") {
         console.log("CHUPATE CUATRO")
     }
 }
+
+module.exports.Juego = Juego
