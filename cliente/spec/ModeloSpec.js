@@ -45,35 +45,35 @@ describe("Ana crea una partida de 2 jugadores...", function(){
       var partida = ju1.crearPartida(2)
       partida.mazo = partida.mazo.concat(partida.mesa)
   
-          expect(partida.mazo.length).toBe(108);
+          expect(partida.mazo.length).toBe(24);
           var rojo=partida.mazo.filter(function(each){
             return each.color=="rojo";
           });
-          expect(rojo.length).toBe(25);
+          expect(rojo.length).toBe(6);
           var verde=partida.mazo.filter(function(each){
             return each.color=="verde";
           });
-          expect(verde.length).toBe(25);
+          expect(verde.length).toBe(6);
           var amarillo=partida.mazo.filter(function(each){
             return each.color=="amarillo";
           });
-          expect(amarillo.length).toBe(25);
+          expect(amarillo.length).toBe(6);
           var azul=partida.mazo.filter(function(each){
             return each.color=="azul";
           });
-          expect(azul.length).toBe(25);
+          expect(azul.length).toBe(6);
           var comodin=partida.mazo.filter(function(each){
             return each.tipo=="cambiocolor";
           });
-          expect(comodin.length).toBe(4);
+          expect(comodin.length).toBe(0);
           var comodin2=partida.mazo.filter(function(each){
             return each.tipo=="mas2";
           });
-          expect(comodin2.length).toBe(8);
+          expect(comodin2.length).toBe(0);
           var comodin4=partida.mazo.filter(function(each){
             return each.tipo=="mas4";
           });
-          expect(comodin4.length).toBe(4);
+          expect(comodin4.length).toBe(0);
         });
 
         it("Comprobamos la partida para 2 jugadores", function(){
@@ -127,8 +127,8 @@ describe("Ana crea una partida de 2 jugadores...", function(){
           j2.manoInicial()
 
           expect(j1.mano.length).toBe(7)
-          expect(j2.mano.length).toBe(7)
-          expect(partida.mazo.length).toBe(93)
+          expect(j2.mano.length).toBe(2)
+          expect(partida.mazo.length).toBe(0)
           expect(partida.mesa.length).toBe(1)
         })
 
