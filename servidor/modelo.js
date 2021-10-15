@@ -4,12 +4,15 @@ function Juego() {
     this.partidas = {}
 
     this.agregarJugadores = function(nick) {
+        var res = {nick: -1}
         if (!this.usuarios[nick]) {
             var jugador = new Jugador(nick, this)
             this.usuarios[nick] = jugador
+            res = {nick: nick}
         } else {
-            alert("El nick está en uso")
+            console.log("El nick está en uso")
         }
+        return res;
     }
 
     this.crearPartida = function(nick, numJugadores) {
@@ -122,7 +125,7 @@ function Jugador(nick, juego) {
             var carta = this.mano[num]
             partida.jugarCarta(carta, this.nick)
         } else {
-            alert("No es tu turno")
+            console.log("No es tu turno")
         }
     }
 
@@ -259,7 +262,7 @@ function Partida(codigo, propietario, numJugadores) {
             //     this.turno = this.jugadores[this.nombresJug[this.ronda%this.numeroJugadores()]]
             // }
         } else {
-            alert("No es tu turno")
+            console.log("No es tu turno")
         }
     }
 
@@ -351,11 +354,11 @@ function Inicial() {
     }
 
     this.pasarTurno = function(nick, partida) {
-        alert("La partida no ha comenzado")
+        console.log("La partida no ha comenzado")
     }
 
     this.jugarCarta = function(carta, nick, partida) {
-        alert("La partida no ha comenzado")
+        console.log("La partida no ha comenzado")
     }
 }
 
@@ -363,7 +366,7 @@ function Jugando() {
     this.nombre = "jugando"
 
     this.unirAPartida = function(partida, jugador) {
-        alert("La partida ya ha comenzado")
+        console.log("La partida ya ha comenzado")
     }
 
     this.pasarTurno = function(nick, partida) {
@@ -379,15 +382,15 @@ function Final() {
     this.nombre = "final"
     
     this.unirAPartida = function(partida, jugador) {
-        alert("La partida ha terminado")
+        console.log("La partida ha terminado")
     }
 
     this.pasarTurno = function(nick, partida) {
-        alert("La partida ha terminado")
+        console.log("La partida ha terminado")
     }
 
     this.jugarCarta = function(carta, nick, partida) {
-        alert("La partida ha terminado")
+        console.log("La partida ha terminado")
     }
 }
 
