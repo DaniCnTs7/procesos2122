@@ -367,6 +367,7 @@ function Jugando() {
 
     this.unirAPartida = function(partida, jugador) {
         console.log("La partida ya ha comenzado")
+        jugador.codigoPartida = -1
     }
 
     this.pasarTurno = function(nick, partida) {
@@ -383,6 +384,7 @@ function Final() {
     
     this.unirAPartida = function(partida, jugador) {
         console.log("La partida ha terminado")
+        jugador.codigoPartida = -1
     }
 
     this.pasarTurno = function(nick, partida) {

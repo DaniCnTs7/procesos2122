@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Uno App</title>
+    <title>Uno App</title>´
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/cliente/clienteRest.js"></script>
+    <script src="/cliente/clienteWS.js"></script>
 </head>
 <body> 
     <script type="text/javascript">
         var rest = new ClienteRest()
+        var ws = new ClienteWS()
     </script>
 </body>
 </html>

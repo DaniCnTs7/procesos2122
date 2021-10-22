@@ -6,7 +6,7 @@ function ClienteRest() {
     } 
 
     this.crearPartida = function(nick, numJugadores) {
-        $.getJSON("/crearPartida/" + nick + "/" + numJugadores, function(data) {
+        $.getJSON("/crearPartida/" + numJugadores + "/" + nick, function(data) {
             console.log(data)
         })
     }
@@ -18,7 +18,7 @@ function ClienteRest() {
     }
     
     this.partidas = function() {
-        $.getJSON("/partidas/",function(data) {
+        $.getJSON("/partidas",function(data) {
             console.log(data)
         })
     }
