@@ -1,6 +1,6 @@
 function ServidorWS() {
     //zona cliente del servidor WS
-    this.enviarAlReminente = function(socket, mensaje, datos) {
+    this.enviarAlRemitente = function(socket, mensaje, datos) {
         socket.emit(mensaje, datos)
     }
     this.enviarATodos = function(io, codigo, mensaje, datos) {
@@ -13,14 +13,15 @@ function ServidorWS() {
         io.on("connection", function(socket) {
             console.log("Usuario conectado")
 
-            socket.on("crearPartida", function(num, nick="nada") {
+            socket.on("crearPartida", function(num, nick) {
                 var ju1 = juego.usuarios[nick]
-                var res = {codigo: -1}
+                var res = {codigo: -1, fase: ""}
                 var partida = ju1.crearPartida(num)
                 console.log("Nueva partida de "+nick+" codigo: "+ju1.codigoPartida.join(""))
                 res.codigo = ju1.codigoPartida
+                res.fase = partida.fase
                 socket.join(res.codigo)
-                cli.enviarAlReminente(socket, "partidaCreada", res)
+                cli.enviarAlRemitente(socket, "partidaCreada", res)
             })
 
             socket.on("unirAPartida", function(codigo, nick) {
@@ -33,19 +34,37 @@ function ServidorWS() {
                 if(res.codigo != -1) {
                     socket.join(res.codigo)
                     var partida = juego.partidas[cod]
-                    cli.enviarAlReminente(socket, "unidoAPartida", res)
+                    cli.enviarAlRemitente(socket, "unidoAPartida", res)
                     if (partida.fase.nombre == "jugando") {
                         cli.enviarATodos(io, codigo, "pedirCartas", {})
                     }
                 } else {
-                    cli.enviarAlReminente(socket, "fallo", res)
+                    socket.join(res)
+                    cli.enviarAlRemitente(socket, "fallo", res)
                 }
             })
 
             socket.on("manoInicial", function(nick) {
                 var ju1 = juego.usuarios[nick]
                 ju1.manoInicial()
-                cli.enviarAlReminente(socket, "mano", ju1.mano)
+                cli.enviarAlRemitente(socket, "mano", ju1.mano)
+                // socket.join()
+                var partida = juego.partidas[ju1.codigoPartida]
+                cli.enviarAlRemitente(socket, "turno", {turno: partida.turno.nick, cartaActual: partida.mano})
+            })
+
+            socket.on("jugarCarta", function(num, nick) {
+                var ju1 = juego.usuarios[nick]
+                var res = {codigo: -1}
+                ju1.jugarCarta(num)
+                cli.enviarAlRemitente(socket, "mano", ju1.mano)
+                var codigo = ju1.codigoPartida
+                var partida = juego.partidas[codigo]
+                res = {turno: partida.turno.nick, cartaActual: partida.mano}
+                cli.enviarAlRemitente(io, "cartaJugada", res)
+                if (partida.fase.nombre == "final") {
+                    cli.enviarATodos(io, codigo, "final", {turno: partida.turno.nick})
+                }
             })
         })
     }
