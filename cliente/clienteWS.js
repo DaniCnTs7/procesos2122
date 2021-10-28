@@ -20,6 +20,12 @@ function ClienteWS() {
     this.jugarCarta = function(num, nick) {
         this.socket.emit("jugarCarta", num, nick)
     }
+    this.robarCarta = function(nick) {
+        this.socket.emit("robarCarta", nick)
+    }
+    this.pasarTurno = function(nick) {
+        this.socket.emit("pasarTurno", nick)
+    }
     
     //servidor WS del cliente
     this.servidorWSCliente = function() {
@@ -45,6 +51,9 @@ function ClienteWS() {
             console.log(data)
         })
         this.socket.on("cartaJugada", function(data) {
+            console.log(data)
+        })
+        this.socket.on("fallo", function(data) {
             console.log(data)
         })
     }

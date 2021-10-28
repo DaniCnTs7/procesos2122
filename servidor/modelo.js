@@ -17,19 +17,23 @@ function Juego() {
 
     this.crearPartida = function(nick, numJugadores) {
         //crear código único
-        var codigo = "-1"
-        var jugador = this.usuarios[nick]
-        codigo = this.obtenerCodigo()
-        while(this.partidas[codigo]) {
+        if(numJugadores>=2 && numJugadores <= 8) {
+            var codigo = "-1"
+            var jugador = this.usuarios[nick]
             codigo = this.obtenerCodigo()
+            while(this.partidas[codigo]) {
+                codigo = this.obtenerCodigo()
+            }
+            jugador.codigoPartida = codigo
+            //crear la instancia de partida
+            var partida = new Partida(codigo, jugador, numJugadores)
+            //asignarla a la colección partidas
+            this.partidas[codigo] = partida
+    
+            return partida
+        } else {
+            return undefined
         }
-        jugador.codigoPartida = codigo
-        //crear la instancia de partida
-        var partida = new Partida(codigo, jugador, numJugadores)
-        //asignarla a la colección partidas
-        this.partidas[codigo] = partida
-
-        return partida
     }
 
     this.obtenerTodasPartidas = function() {
