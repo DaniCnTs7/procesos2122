@@ -1,23 +1,20 @@
 function ControlWeb() {
 
     this.mostrarAgregarJugador = function() {
+        var nick = $("#usr").val()
+        rest.agregarJugador(nick)
+        
+        $("#mAJ").remove()
+
         var cadena = `
-        <div id="mAJ">
-            <div class="input-group mb-3">
-                <input type="text" id="usr" class="form-control" placeholder="Nick" aria-label="Nick" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button id="btnAJ" class="btn btn-outline-secondary" type="button">Agregar jugador</button>
-                </div>
-            </div>
-        </div>`
+            <div id="divNick">
+                <label>Nick:</label>
+                <p class="d-inline" id="nick">`+nick+`</p>
+            </div>`
 
         $("#agregarJugador").append(cadena)
-
-        $("#btnAJ").on("click", function() {
-            var nick = $("#usr").val()
-            $("#mAJ").remove()
-            rest.agregarJugador(nick)
-        })    
+        this.mostrarCrearPartida()
+            
     }
 
     // Mostrar crear partida
@@ -26,7 +23,6 @@ function ControlWeb() {
         <div id="mCP">
             <div class="input-group mb-3">
                 <input type="number" id="numJug" class="form-control" placeholder="Número jugadores (2-8)" aria-label="NumJug" aria-describedby="basic-addon2">
-                <input type="text" id="nick" class="form-control" placeholder="Nick" aria-label="nick" aria-describedby="basic-addon2">
                 <div class="input-group-append">
                     <button id="btnCP" class="btn btn-outline-secondary" type="button">Crear partida</button>
                 </div>
@@ -37,8 +33,20 @@ function ControlWeb() {
     
         $("#btnCP").on("click", function() {
             var numJug = $("#numJug").val()
-            var nick = $("#nick").val()
-            ws.crearPartida(numJug, nick)
+            var nick = $("#nick").text()
+            var res = ws.crearPartida(numJug, nick)
+            console.log(res)
+
+
+            $("#mCP").remove()
+            $("#divNick").remove()
+
+            var cargando = `
+            <div class="spinner-border text-success" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>`
+
+            $("#esperando").append(cargando)
         })
     }
     

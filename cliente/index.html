@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uno App</title>´
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- jQuery library -->
@@ -27,10 +28,19 @@
               <h2>Juego de cartas: El UNO</h2>
           </div>
           <div class="col-md-8">
-              <div id="agregarJugador"></div>
+              <div id="agregarJugador">
+                <div id="mAJ">
+                    <div class="input-group mb-3">
+                        <input type="text" id="usr" class="form-control" placeholder="Nick" aria-label="Nick" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button id="btnAJ" class="btn btn-outline-secondary" onclick="iu.mostrarAgregarJugador()" type="button">Agregar jugador</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
               <div id="crearPartida"></div>
-               <div id="esperando">Esperando rival</div>
-              <div id="listaPartidas">Lista de partidas: <button class="btn btn-primary" onclick="iu.mostrarListaPartidas()">Partidas</button></div>
+               <div id="esperando"></div>
+              <div id="listaPartidas"></div>
               <div id="unirAPartida"></div>
           </div>
         </div>

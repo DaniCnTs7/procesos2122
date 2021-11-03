@@ -36,6 +36,13 @@ function ClienteWS() {
         this.socket.on("partidaCreada", function(data) {
             console.log(data)
             cli.codigo = data.codigo
+            // iu.mostrarControl()
+            // iu.mostrarEsperando()
+        })
+        this.socket.on("nuevaPartida", function(data) {
+            if (!cli.codigo && cli.nick) {
+                iu.mostrarListaPartidas(data)
+            }
         })
         this.socket.on("unidoAPartida", function(data) {
             console.log(data)
