@@ -18,8 +18,18 @@ function ClienteRest() {
     }
     
     this.partidas = function() {
-        $.getJSON("/partidas",function(data) {
-            console.log(data)
+        $.getJSON("/partidas", function(data) {
+            var partidas = []
+            $.each(data, function(key, val) {
+                console.log(val)
+                partidas.push("<li id='" + key + "'>" + val.numjugadores + "</li>")
+                partidas.push("<li id='" + key + "'>" + val.codigo + "</li>")
+                partidas.push("<li id='" + key + "'>" + val.propietario + "</li>")
+            })
+            $("<ul/>", {
+                "class": "my-new-list",
+                html: partidas.join( "" )
+              }).appendTo( "#c1" );
         })
     }
 }
