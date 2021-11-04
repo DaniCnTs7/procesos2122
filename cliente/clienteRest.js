@@ -2,6 +2,14 @@ function ClienteRest() {
     this.agregarJugador = function(nick) {
         $.getJSON("/agregarJugador/"+ nick, function(data) {
             console.log(data)
+            if(data.nick != -1) {
+                ws.nick = data.nick
+                iu.mostrarEleccion()
+                // rest.obtenerPartidasDisponibles()
+            } else {
+                iu.mostrarModal("El nick '"+nick+"' está en uso.")
+                iu.mostrarAgregarJugador()
+            }
         })
     } 
 
@@ -19,17 +27,15 @@ function ClienteRest() {
     
     this.partidas = function() {
         $.getJSON("/partidas", function(data) {
-            var partidas = []
-            $.each(data, function(key, val) {
-                console.log(val)
-                partidas.push("<li id='" + key + "'>" + val.numjugadores + "</li>")
-                partidas.push("<li id='" + key + "'>" + val.codigo + "</li>")
-                partidas.push("<li id='" + key + "'>" + val.propietario + "</li>")
-            })
-            $("<ul/>", {
-                "class": "my-new-list",
-                html: partidas.join( "" )
-              }).appendTo( "#c1" );
+            console.log(data)
+            // iu.mostrarListaPartidas(data)
+        })
+    }
+
+    this.obtenerPartidasDisponibles = function() {
+        $.getJSON("/obtenerPartidasDisponibles", function(data) {
+            console.log(data)
+            iu.mostrarListaPartidas(data)
         })
     }
 }

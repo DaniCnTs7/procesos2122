@@ -52,6 +52,7 @@ function ClienteWS() {
         })
         this.socket.on("mano", function(data) {
             console.log(data)
+            iu.mostrarMano(data)
         })
         this.socket.on("turno", function(data) {
             console.log(data)

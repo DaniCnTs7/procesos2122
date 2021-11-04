@@ -41,11 +41,13 @@ function Juego() {
 
         for(each in this.partidas) {
             var partida = this.partidas[each]
-            lista.push({
-                propietario: partida.propietario,
-                codigo: each,
-                numjugadores: partida.numeroJugadores() +'/'+partida.numJugadores
-            })
+            if(partida.fase.nombre="inicial") {
+                lista.push({
+                    propietario: partida.propietario,
+                    codigo: each,
+                    numjugadores: partida.numeroJugadores() +'/'+partida.numJugadores
+                })
+            }
         }
         return lista
     }

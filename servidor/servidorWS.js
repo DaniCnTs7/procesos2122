@@ -27,7 +27,9 @@ function ServidorWS() {
                         res.codigo = ju1.codigoPartida
                         res.fase = partida.fase
                         socket.join(res.codigo)
+                        var lista = juego.obtenerTodasPartidas()
                         cli.enviarAlRemitente(socket, "partidaCreada", res)
+                        cli.enviarGlobal(socket, "nuevaPartida", lista)
                     } else {
                         cli.enviarAlRemitente(socket, "fallo", "La partida no ha podido crearse")    
                     }

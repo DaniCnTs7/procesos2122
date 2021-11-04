@@ -66,6 +66,13 @@ app.get("/partidas", function(req, res) {
     }
 })
 
+app.get("/obtenerPartidasDisponibles", function(req, res) {
+    if (juego) {
+        var partidas = juego.obtenerTodasPartidas()
+        res.send(partidas)
+    }
+})
+
 http.listen(app.get("port"), function(port) {
     console.log("La app NodeJS se está ejecutando en el puerto " + app.get("port"))
 })
