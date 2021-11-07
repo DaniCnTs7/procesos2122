@@ -8,7 +8,6 @@ function ClienteRest() {
                 // rest.obtenerPartidasDisponibles()
             } else {
                 iu.mostrarModal("El nick '"+nick+"' está en uso.")
-                iu.mostrarAgregarJugador()
             }
         })
     } 
@@ -16,6 +15,7 @@ function ClienteRest() {
     this.crearPartida = function(nick, numJugadores) {
         $.getJSON("/crearPartida/" + numJugadores + "/" + nick, function(data) {
             console.log(data)
+            ws.codigo = data.codigo
         })
     }
 

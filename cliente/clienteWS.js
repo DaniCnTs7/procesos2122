@@ -10,9 +10,9 @@ function ClienteWS() {
         this.nick = nick
         this.socket.emit("crearPartida", num, nick)
     }
-    this.unirAPartida = function(codigo, nick) {
+    this.unirAPartida = function(codigo, nick=this.nick) {
         this.nick = nick
-        this.socket.emit("unirAPartida", codigo, nick)
+        this.socket.emit("unirAPartida", codigo.id, nick)
     }
     this.manoInicial = function() {
         this.socket.emit("manoInicial", this.nick)
@@ -36,16 +36,25 @@ function ClienteWS() {
         this.socket.on("partidaCreada", function(data) {
             console.log(data)
             cli.codigo = data.codigo
-            iu.mostrarCargando()
+            iu.mostrarCargando(data)
         })
         this.socket.on("nuevaPartida", function(data) {
             if (!cli.codigo && cli.nick) {
+                $("#listaPartidas").remove()
                 iu.mostrarListaPartidas(data)
+            }
+        })
+        this.socket.on("nuevoMiembro", function(data) {
+            console.log(data)
+            $("#listaJugadores").remove()
+            iu.mostrarCargando(data)
+            if (cli.codigo && cli.nick) {
             }
         })
         this.socket.on("unidoAPartida", function(data) {
             console.log(data)
             cli.codigo = data.codigo
+            iu.mostrarCargando(data)
         })
         this.socket.on("pedirCartas", function(data) {
             cli.manoInicial()

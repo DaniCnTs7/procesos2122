@@ -37,7 +37,7 @@ app.get("/crearPartida/:numJug/:nick", function(req, res) {
     var response = {codigo: -1}
     if(ju1) {
         var partida = ju1.crearPartida(numJugadores)
-        console.log("Nueva partida con codigo: " + partida.codigo.join(""))
+        console.log("Nueva partida con codigo: " + partida.codigo)
         response = {codigo: partida.codigo}
     }
     res.send(response)
@@ -45,14 +45,14 @@ app.get("/crearPartida/:numJug/:nick", function(req, res) {
 
 //unir a partida
 app.get("/unirAPartida/:codigo/:nick", function(req, res) {
-    var codigo = req.params.codigo.split("")
+    var codigo = req.params.codigo
     var nick = req.params.nick
     var ju1 = juego.usuarios[nick]
     var partida = juego.partidas[codigo]
     var response = {codigo: -1}
     if(ju1) {
         ju1.unirAPartida(codigo, nick)
-        console.log("El jugador "+nick+" se ha unido a la partida: "+codigo.join(""))
+        console.log("El jugador "+nick+" se ha unido a la partida: "+codigo)
         response = {codigo: partida.codigo, jugadores: partida.nombresJug}
     }
     res.send(response)

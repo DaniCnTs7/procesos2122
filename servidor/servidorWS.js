@@ -20,12 +20,13 @@ function ServidorWS() {
             socket.on("crearPartida", function(num, nick) {
                 var ju1 = juego.usuarios[nick]
                 if(ju1){
-                    var res = {codigo: -1, fase: ""}
+                    var res = {codigo: -1, fase: "", jugadores: []}
                     var partida = ju1.crearPartida(num)
                     if(partida) {
-                        console.log("Nueva partida de "+nick+" codigo: "+ju1.codigoPartida.join(""))
+                        console.log("Nueva partida de "+nick+" codigo: "+ju1.codigoPartida)
                         res.codigo = ju1.codigoPartida
                         res.fase = partida.fase
+                        res.jugadores = partida.nombresJug
                         socket.join(res.codigo)
                         var lista = juego.obtenerTodasPartidas()
                         cli.enviarAlRemitente(socket, "partidaCreada", res)
@@ -40,8 +41,9 @@ function ServidorWS() {
 
             socket.on("unirAPartida", function(codigo, nick) {
                 var ju1 = juego.usuarios[nick]
-                var cod = codigo.split("")
+                var cod = codigo
                 var partida = juego.partidas[cod]
+                var listaJugadores = {jugadores: []}
                 var res = {codigo: -1}
                 
                 if (ju1 && partida) {
@@ -50,7 +52,9 @@ function ServidorWS() {
                         res.codigo = ju1.codigoPartida
                         if(res.codigo != -1) {
                             socket.join(res.codigo)
+                            listaJugadores.jugadores = partida.nombresJug
                             cli.enviarAlRemitente(socket, "unidoAPartida", res)
+                            cli.enviarGlobal(socket, "nuevoMiembro", listaJugadores)
                             if (partida.fase.nombre == "jugando") {
                                 cli.enviarATodos(io, codigo, "pedirCartas", {})
                                 cli.enviarAlRemitente(socket, "unidoAPartida", {cartaActual: partida.mesa[partida.mesa.length-1], turno: partida.turno.nick, cartasJugador: partida.turno.mano})

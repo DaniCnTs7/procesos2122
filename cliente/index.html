@@ -21,6 +21,11 @@
     <script src="/cliente/clienteWS.js"></script>
     <script src="/cliente/controlWeb.js"></script>
 </head>
+<style>
+    html {
+        overflow-y: scroll;
+    }
+</style>
 <body> 
 <header id="bienvenido" class="mb-5 bg-danger text-light">
     <div class="container-fluid">
@@ -36,7 +41,7 @@
 </header>
 
 <main>
-    <div id="c1" class="container scroll">
+    <div id="c1" class="container scroll mb-5 p-3">
         <div id="contenedor" class="text-center row justify-content-center">
             <div id="agregarJugador">
                 <div id="mAJ">
@@ -90,17 +95,6 @@
         </div>
     </div>
 </main>
-
-<footer class="d-flex mt-auto fixed-bottom">
-    <div class="col py-3 mt-4 px-5 border-top bg-white text-center">
-        <p class="mb-0 text-muted"><small>&copy;&nbsp;Juego EL UNO creado por Daniel Cantos García </small></p>
-    </div>
-</footer>
-
-<div id="crearPartida"></div>
- <div id="esperando"></div>
-<div id="listaPartidas"></div>
-<div id="unirAPartida"></div>
 
 
 <script type="text/javascript">

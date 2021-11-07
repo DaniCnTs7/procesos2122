@@ -8,7 +8,6 @@ function ControlWeb() {
             if(nick) {
                 
                 // $("#agregarJugador").remove()
-                
                 rest.agregarJugador(nick)
                 // iu.mostrarControl()
                 // iu.mostrarEleccion()
@@ -18,7 +17,7 @@ function ControlWeb() {
     }
 
     this.mostrarEleccion = function() {
-        var nick = $("#nick").text()
+        var nick = $("#usr").val()
         $("#agregarJugador").remove()
 
         var cadena = `
@@ -50,6 +49,10 @@ function ControlWeb() {
 
         $("#unirse").on("click", function() {
             $("#elecciones").remove()
+            var div= `
+            <h3 class="text-center mb-3 pb-3">Lista de partidas</h3>
+            <div id="listaPartidas"></div>`
+            $("#c1").append(div)
             rest.obtenerPartidasDisponibles()
         })
 
@@ -67,32 +70,31 @@ function ControlWeb() {
         $("#col-izq").append(cadena)
     }
 
-    this.mostrarCargando = function() {
+    this.mostrarCargando = function(data) {
+        console.log('JUGADORES: ' + data.jugadores)
+        var jugadores = data.jugadores
         var cadena = `
         <div id="cabecera" class="col p-5 text-center">
             <div class="spinner-border text-light p-5" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
+        </div>
+        <div class="mb-2 text-center">
+            <h3>JUGADORES</h3>
         </div>`
+        for (var i = 0; i < jugadores.length; i++) {
+            console.log(jugadores[i])
+            var cad = `
+            <div id="listaJugadores">
+                <h5>`+jugadores[i]+`</h5>
+            </div>`
+            $("#c1").append(cad)
+        }
+        
 
-        var cadena2 = `
-        <div class="row justify-content-center mb-2">
-                <h3>JUGADORES</h3>
-            </div>
-            <div class="row justify-content-center">
-                <p>Jugador 1</p>
-            </div>
-            <div class="row justify-content-center">
-                <p>Jugador 2</p>
-            </div>
-            <div class="row justify-content-center">
-                <p>Jugador 3</p>
-        </div>`
-
+        $("#bienvenido").append(cadena)  
         $("#cabecera").remove()
         $("#mCP").remove()
-        $("#bienvenido").append(cadena)  
-        $("#c1").append(cadena2)
     }
 
     // Mostrar crear partida
@@ -146,31 +148,39 @@ function ControlWeb() {
     
     // Mostrar todas las partidas
     this.mostrarListaPartidas = function(data) {
-        var h3 = '<h3 class="text-center mb-3 pb-3">Lista de partidas</h3>'
-        $("#c1").append(h3)        
+        $("#listaPartidas").remove()
+        var div= `<div id="listaPartidas"></div>`
+        $("#c1").append(div)
         for (var i = 0; i < data.length; i++) {
+            var codigo = data[i].codigo
+            var propietario = data[i].propietario 
+            var numJug = data[i].numjugadores
             var cadena = `
-            <div class="list-group">
-                <button type="button" class="list-group-item list-group-item-action">
+            <div id="`+data[i].codigo+`" class="list-group">
+                <button type="button" onclick="ws.unirAPartida(`+codigo+`)" class="list-group-item list-group-item-action">
                     <div class="row">
                         <div class="col-2">
                             <img src="" alt="IMAGEN">
                         </div>
                         <div class="col-4 d-flex justify-content-center">
                             <label>Código:</label>
-                            <p>`+data[i].codigo+`</p>
+                            <p>`+codigo+`</p>
                         </div>
                         <div class="col-4 d-flex justify-content-center">
-                            <label>Propietario:</label>`+data[i].propietario+`
+                            <label>Propietario:</label>`+ propietario +`
                         </div>
                         <div class="col-2 d-flex justify-content-end">
-                            `+data[i].numjugadores+`
+                            `+numJug+`
                         </div>
                     </div>
                 </button>
             </div>`
-            $("#c1").append(cadena)        
+            $("#listaPartidas").append(cadena)        
         }
+    }
+
+    this.mostrarListaJugadores = function(jugadores) {
+
     }
 
     this.mostrarModal = function(msg) {

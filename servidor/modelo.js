@@ -72,7 +72,7 @@ function Juego() {
             codigo.push(letras[randomInt(1,maxCadena)-1]);
         }
 
-        return codigo
+        return codigo.join('')
         // return Date.now().toString()
     }
 
@@ -374,6 +374,7 @@ function Jugando() {
     this.unirAPartida = function(partida, jugador) {
         console.log("La partida ya ha comenzado")
         jugador.codigoPartida = -1
+        return {msg: 'La partida ya ha comenzado'}
     }
 
     this.pasarTurno = function(nick, partida) {
