@@ -435,7 +435,7 @@ function Sentido(color, tipo = "sentido") {
 }
 
 function CambioColor(tipo = "cambiocolor") {
-    this.tipo = tipo
+    this.color = tipo
     this.valor = 40
 
     this.comprobarEfecto = function(partida) {
@@ -444,8 +444,8 @@ function CambioColor(tipo = "cambiocolor") {
 }
 
 function Mas2(color, tipo = "mas2") {
-    this.tipo = tipo
-    this.color = color
+    this.color = tipo
+    this.cambio = color
     this.valor = 20
 
     this.comprobarEfecto = function(partida) {
@@ -454,7 +454,7 @@ function Mas2(color, tipo = "mas2") {
 }
 
 function Mas4(tipo = "mas4") {
-    this.tipo = tipo
+    this.color = tipo
     this.valor = 50
 
     this.comprobarEfecto = function(partida) {

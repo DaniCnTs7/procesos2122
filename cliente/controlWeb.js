@@ -50,7 +50,7 @@ function ControlWeb() {
         $("#unirse").on("click", function() {
             $("#elecciones").remove()
             var div= `
-            <h3 class="text-center mb-3 pb-3">Lista de partidas</h3>
+            <h3 id="tituloLP" class="text-center mb-3 pb-3">Lista de partidas</h3>
             <div id="listaPartidas"></div>`
             $("#c1").append(div)
             rest.obtenerPartidasDisponibles()
@@ -72,23 +72,31 @@ function ControlWeb() {
 
     this.mostrarCargando = function(data) {
         console.log('JUGADORES: ' + data.jugadores)
+        $("#contenedor").remove()
+        $("#listaPartidas").remove()
+        $("#listaJugadores").remove()
+        $("#tituloLP").remove()
+        var lj = '<div id="listaJugadores" class="container scroll mb-5"></div>'
+        $("#c1").append(lj)
+        var div= `
+        <h3 class="text-center mb-3 pb-3">Lista de jugadores</h3>`
+        $("#listaJugadores").append(div)
+        var div1= `<div id="lJ" class="container"></div>`
+        $("#listaJugadores").append(div1) 
         var jugadores = data.jugadores
         var cadena = `
         <div id="cabecera" class="col p-5 text-center">
             <div class="spinner-border text-light p-5" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
-        </div>
-        <div class="mb-2 text-center">
-            <h3>JUGADORES</h3>
         </div>`
         for (var i = 0; i < jugadores.length; i++) {
             console.log(jugadores[i])
             var cad = `
-            <div id="listaJugadores">
+            <div class="d-flex flex-row justify-content-center" id="jugador_`+jugadores[i]+`">
                 <h5>`+jugadores[i]+`</h5>
             </div>`
-            $("#c1").append(cad)
+            $("#lJ").append(cad)
         }
         
 
@@ -108,14 +116,15 @@ function ControlWeb() {
                 </div>
             </div>
         </div>`
-    
+
+        
         $("#col-centro").append(cadena)
-    
+        
         $("#btnCP").on("click", function() {
             var numJug = $("#numJug").val()
             var nick = $("#nick").text()
-
-            if(numJug) {
+            
+            if(numJug>=2 && numJug <= 8) {
                 ws.crearPartida(numJug, nick)    
             }
         })
@@ -196,15 +205,18 @@ function ControlWeb() {
         <div id="mM" class="card-columns">`
 
         for (var i = 0; i<lista.length; i++) {
+            var carta = lista[i].valor + "_" + lista[i].color+".png"
             cadena += `
             <div class="card bg-light">
-                  <div class="card-body text-center">
-                    <p class="card-text">`+ lista[i].tipo +' '+ lista[i].color +' '+ lista[i].valor +`</p>
-                  </div>
+                <img class="card-img" src="../servidor/img/`+carta+`" alt="">
             </div>`
         }
         cadena += '</div>'
         $("#mano").append(cadena)
+    }
+
+    this.mostrarTablero = function() {
+        $("#listaJugadores").remove()
     }
     
 }

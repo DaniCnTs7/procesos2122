@@ -43,8 +43,7 @@ function ServidorWS() {
                 var ju1 = juego.usuarios[nick]
                 var cod = codigo
                 var partida = juego.partidas[cod]
-                var listaJugadores = {jugadores: []}
-                var res = {codigo: -1}
+                var res = {codigo: -1, jugadores: []}
                 
                 if (ju1 && partida) {
                         ju1.unirAPartida(cod)
@@ -52,12 +51,14 @@ function ServidorWS() {
                         res.codigo = ju1.codigoPartida
                         if(res.codigo != -1) {
                             socket.join(res.codigo)
-                            listaJugadores.jugadores = partida.nombresJug
+                            res.jugadores = partida.nombresJug
                             cli.enviarAlRemitente(socket, "unidoAPartida", res)
-                            cli.enviarGlobal(socket, "nuevoMiembro", listaJugadores)
+                            cli.enviarGlobal(socket, "nuevoMiembro", res)
                             if (partida.fase.nombre == "jugando") {
                                 cli.enviarATodos(io, codigo, "pedirCartas", {})
                                 cli.enviarAlRemitente(socket, "unidoAPartida", {cartaActual: partida.mesa[partida.mesa.length-1], turno: partida.turno.nick, cartasJugador: partida.turno.mano})
+                                cli.enviarGlobal(socket, "partidaEmpezada", {msg: "LA PARTIDA HA COMENZADO"})
+                                cli.enviarAlRemitente(socket, "partidaEmpezada", {})
                             }
                         } else {
                             socket.join(res)

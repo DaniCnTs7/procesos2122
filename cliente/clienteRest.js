@@ -35,6 +35,7 @@ function ClienteRest() {
     this.obtenerPartidasDisponibles = function() {
         $.getJSON("/obtenerPartidasDisponibles", function(data) {
             console.log(data)
+            ws.estado = 'buscandoPartida'
             iu.mostrarListaPartidas(data)
         })
     }

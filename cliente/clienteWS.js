@@ -1,6 +1,7 @@
 function ClienteWS() {
     this.socket
     this.nick
+    this.estado
     this.codigo
     this.conectar = function() {
         this.socket = io()
@@ -39,22 +40,26 @@ function ClienteWS() {
             iu.mostrarCargando(data)
         })
         this.socket.on("nuevaPartida", function(data) {
-            if (!cli.codigo && cli.nick) {
+            if (!cli.codigo && cli.nick && cli.estado) {
                 $("#listaPartidas").remove()
                 iu.mostrarListaPartidas(data)
             }
         })
         this.socket.on("nuevoMiembro", function(data) {
             console.log(data)
-            $("#listaJugadores").remove()
-            iu.mostrarCargando(data)
-            if (cli.codigo && cli.nick) {
+            if (cli.codigo == data.codigo && cli.nick) {
+                $("#listaJugadores").remove()
+                iu.mostrarCargando(data)
             }
         })
         this.socket.on("unidoAPartida", function(data) {
             console.log(data)
             cli.codigo = data.codigo
             iu.mostrarCargando(data)
+        })
+        this.socket.on("partidaEmpezada", function(data) {
+            console.log(data)
+            iu.mostrarTablero()
         })
         this.socket.on("pedirCartas", function(data) {
             cli.manoInicial()
