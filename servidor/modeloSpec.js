@@ -47,23 +47,23 @@ describe("El juego del UNO...", function() {
         var partida = ju1.crearPartida(2)
         partida.mazo = partida.mazo.concat(partida.mesa)
     
-            expect(partida.mazo.length).toBe(24);
+            expect(partida.mazo.length).toBe(68);
             var rojo=partida.mazo.filter(function(each){
               return each.color=="rojo";
             });
-            expect(rojo.length).toBe(6);
+            expect(rojo.length).toBe(13);
             var verde=partida.mazo.filter(function(each){
               return each.color=="verde";
             });
-            expect(verde.length).toBe(6);
+            expect(verde.length).toBe(13);
             var amarillo=partida.mazo.filter(function(each){
               return each.color=="amarillo";
             });
-            expect(amarillo.length).toBe(6);
+            expect(amarillo.length).toBe(13);
             var azul=partida.mazo.filter(function(each){
               return each.color=="azul";
             });
-            expect(azul.length).toBe(6);
+            expect(azul.length).toBe(13);
             var comodin=partida.mazo.filter(function(each){
               return each.tipo=="cambiocolor";
             });
@@ -129,9 +129,25 @@ describe("El juego del UNO...", function() {
             j2.manoInicial()
   
             expect(j1.mano.length).toBe(7)
-            expect(j2.mano.length).toBe(2)
-            expect(partida.mazo.length).toBe(0)
+            expect(j2.mano.length).toBe(7)
+            expect(partida.mazo.length).toBe(39)
             expect(partida.mesa.length).toBe(1)
+          })
+
+          it("Ana roba 1 carta", function() {
+            expect(j1.mano.length).toBe(0)
+            j1.robar(1)
+            expect(j1.mano.length).toBe(1)
+          })
+
+          it("Ana intenta robar una carta pero no hay cartas para robar", function() {
+            expect(partida.mazo.length).toBe(67)
+            partida.mesa = partida.mesa.concat(partida.mazo)
+            partida.mazo = []
+            expect(partida.mesa.length).toBe(68)
+            j1.robar(1)
+            expect(j1.mano.length).toBe(1)
+            expect(partida.mazo.length).toBe(67)
           })
   
   

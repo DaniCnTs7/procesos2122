@@ -3,6 +3,7 @@ function ClienteWS() {
     this.nick
     this.estado
     this.codigo
+    
     this.conectar = function() {
         this.socket = io()
         this.servidorWSCliente()
@@ -18,7 +19,7 @@ function ClienteWS() {
     this.manoInicial = function() {
         this.socket.emit("manoInicial", this.nick)
     }
-    this.jugarCarta = function(num, nick) {
+    this.jugarCarta = function(num, nick=this.nick) {
         this.socket.emit("jugarCarta", num, nick)
     }
     this.robarCarta = function(nick) {
@@ -60,6 +61,7 @@ function ClienteWS() {
         this.socket.on("partidaEmpezada", function(data) {
             console.log(data)
             iu.mostrarTablero()
+            iu.mostrarCartaActual(data)
         })
         this.socket.on("pedirCartas", function(data) {
             cli.manoInicial()
@@ -73,9 +75,23 @@ function ClienteWS() {
         })
         this.socket.on("cartaJugada", function(data) {
             console.log(data)
+            iu.mostrarCartaActual(data)
+            $("#carta0_"+data.nickRival).remove()
         })
         this.socket.on("fallo", function(data) {
             console.log(data)
+            if (data == 'La partida no ha podido crearse') {
+                iu.mostrarModal('La partida debe ser de 2 a 8 jugadores')
+            }
+        })
+        this.socket.on("jugadoresEnPartida", function(data) {
+            var rivales = {}
+            Object.entries(data).forEach(([key, value]) => {
+                if(cli.nick != key) {
+                    rivales[key] = value
+                }
+            })
+            iu.mostrarCartasRival(rivales)
         })
     }
 

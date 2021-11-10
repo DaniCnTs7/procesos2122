@@ -31,14 +31,16 @@ app.get("/agregarJugador/:nick", function(req, res) {
 
 //crear partida
 app.get("/crearPartida/:numJug/:nick", function(req, res) {
-    var nick = req.params.nick
     var numJugadores = req.params.numJug
+    var nick = req.params.nick
     var ju1 = juego.usuarios[nick]
     var response = {codigo: -1}
     if(ju1) {
         var partida = ju1.crearPartida(numJugadores)
-        console.log("Nueva partida con codigo: " + partida.codigo)
-        response = {codigo: partida.codigo}
+        if(partida) {
+            console.log("Nueva partida con codigo: " + partida.codigo)
+            response = {codigo: partida.codigo}
+        }
     }
     res.send(response)
 })

@@ -12,10 +12,15 @@ function ClienteRest() {
         })
     } 
 
-    this.crearPartida = function(nick, numJugadores) {
+    this.crearPartida = function(numJugadores, nick) {
         $.getJSON("/crearPartida/" + numJugadores + "/" + nick, function(data) {
             console.log(data)
-            ws.codigo = data.codigo
+            if(data.codigo != -1) {
+                ws.codigo = data.codigo
+                iu.mostrarCargando(data)
+            } else {
+                iu.mostrarModal("El número de jugadores debe ser de 2-8")
+            }
         })
     }
 

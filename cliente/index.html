@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uno App</title>´
+    <title>Uno App</title>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -20,12 +20,12 @@
     <script src="/cliente/clienteRest.js"></script>
     <script src="/cliente/clienteWS.js"></script>
     <script src="/cliente/controlWeb.js"></script>
+    <style>
+        html {
+            overflow-y: scroll;
+        }
+    </style>
 </head>
-<style>
-    html {
-        overflow-y: scroll;
-    }
-</style>
 <body> 
 <header id="bienvenido" class="mb-5 bg-danger text-light">
     <div class="container-fluid">
@@ -48,28 +48,32 @@
                     <div class="input-group mb-3">
                         <input type="text" id="usr" class="form-control" placeholder="Nick" aria-label="Nick" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button id="btnAJ" class="btn btn-outline-secondary" type="button">Agregar jugador</button>
+                            <button id="btnAJ" class="btn btn-outline-secondary" onclick="rest.agregarJugador($('#usr').val())" type="button">Agregar jugador</button>
                         </div>
                     </div>
                 </div>
             </div>
+            <div id="crearPartida"></div>
+            <div id="unirAPartida"></div>
+            <div id="elegirAccion"></div>
+            <div id="mostrarPartidas" class="container-fluid"></div>
+            <div id="listaJugadores" class="container scroll mb-5"></div>
         </div>
-        <div id="listaJugadores" class="container scroll mb-5"></div>
     </div>
-    <div class="container" id="tablero">
-        <div class="row">
+    <div class="container-fluid vh-100" id="tablero">
+        <div class="row justify-content-center">
             <div id="rivales">
                 
             </div>
         </div>
-        <div class="row">
+        <div class="row justify-content-center">
             <div id="actual">
                 
             </div>
         </div>
-        <div class="row">
+        <div class="row justify-content-center">
             <div id="mano">
-                <img src="./img/2_amarillo.png" alt="">
+                
             </div>
         </div>
     </div>
@@ -99,12 +103,10 @@
     </div>
 </main>
 
-
 <script type="text/javascript">
         var rest = new ClienteRest()
         var ws = new ClienteWS()    
         var iu = new ControlWeb()
-        iu.mostrarAgregarJugador()
     </script>
 </body>
 </html>

@@ -57,8 +57,16 @@ function ServidorWS() {
                             if (partida.fase.nombre == "jugando") {
                                 cli.enviarATodos(io, codigo, "pedirCartas", {})
                                 cli.enviarAlRemitente(socket, "unidoAPartida", {cartaActual: partida.mesa[partida.mesa.length-1], turno: partida.turno.nick, cartasJugador: partida.turno.mano})
-                                cli.enviarGlobal(socket, "partidaEmpezada", {msg: "LA PARTIDA HA COMENZADO"})
-                                cli.enviarAlRemitente(socket, "partidaEmpezada", {})
+                                cli.enviarGlobal(socket, "partidaEmpezada", {msg: "LA PARTIDA HA COMENZADO", cartaActual: partida.mesa[partida.mesa.length-1]})
+                                cli.enviarAlRemitente(socket, "partidaEmpezada", {msg: "LA PARTIDA HA COMENZADO", cartaActual: partida.mesa[partida.mesa.length-1]})
+                                var listaJugadores = {}
+                                var nombresJug = partida.nombresJug
+                                for (var i = 0; i < nombresJug.length; i++) {
+                                    var jugador = juego.usuarios[nombresJug[i]]
+                                    listaJugadores[jugador.nick] = jugador.mano.length
+                                }
+                                console.log(listaJugadores)
+                                cli.enviarATodos(io, codigo, "jugadoresEnPartida", listaJugadores)
                             }
                         } else {
                             socket.join(res)
@@ -89,9 +97,11 @@ function ServidorWS() {
                     cli.enviarAlRemitente(socket, "mano", ju1.mano)
                     var codigo = ju1.codigoPartida
                     var partida = juego.partidas[codigo]
-                    res = {turno: partida.turno.nick, cartaActual: partida.mesa[partida.mesa.length-1], mazo: partida.mazo}
-                    // cli.enviarAlRemitente(io, "cartaJugada", res)
+                    res = {turno: partida.turno.nick, cartaActual: partida.mesa[partida.mesa.length-1], mazo: partida.mazo, nickRival: cli.nick}
+                    cli.enviarAlRemitente(io, "cartaJugada", res)
                     cli.enviarATodos(io, codigo, "turno", res)
+                    cli.enviarGlobal(socket, "cartaJugada", res)
+
                     if (partida.fase.nombre == "final") {
                         cli.enviarATodos(io, codigo, "final", {turno: partida.turno.nick})
                     }
@@ -103,6 +113,7 @@ function ServidorWS() {
             socket.on("robarCarta", function(nick) {
                 var ju1 = juego.usuarios[nick]
                 var partida = juego.partidas[ju1.codigoPartida]
+                var codigo = ju1.codigoPartida
                 ju1.robar(1)
                 var cartaRobada = ju1.mano[ju1.mano.length-1]
                 cli.enviarAlRemitente(socket, "mano", cartaRobada)

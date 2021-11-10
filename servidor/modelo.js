@@ -94,7 +94,7 @@ function Jugador(nick, juego) {
     this.codigoPartida
 
     this.crearPartida = function(numJugadores) {
-        return this.juego.crearPartida(nick, numJugadores)
+        return this.juego.crearPartida(this.nick, numJugadores)
     }
 
     this.unirAPartida = function(codigo, nick=this.nick) {
@@ -183,52 +183,54 @@ function Partida(codigo, propietario, numJugadores) {
             this.mazo.push(new Numero(0,colores[i]))
             for(j = 1;j<5;j++) {
                 this.mazo.push(new Numero(j,colores[i]))
-                // this.mazo.push(new Numero(j,colores[i]))
+                this.mazo.push(new Numero(j,colores[i]))
             }
             
         }
 
         //Crear carta de bloqueo
         //Valor 10 para las cartas de bloqueo
-        // for(i = 0; i < colores.length; i++) {
-        //     this.mazo.push(new Bloqueo(colores[i]))
-        //     this.mazo.push(new Bloqueo(colores[i]))
-        // }
+        for(i = 0; i < colores.length; i++) {
+            this.mazo.push(new Bloqueo(colores[i]))
+            this.mazo.push(new Bloqueo(colores[i]))
+        }
 
         //Crear carta de cambio de sentido
         //Valor 11 para las cartas de cambio de sentido
         for(i = 0; i < colores.length; i++) {
             this.mazo.push(new Sentido(colores[i]))
-            // this.mazo.push(new Sentido(colores[i]))
+            this.mazo.push(new Sentido(colores[i]))
         }
 
         //Crear 8 cartas mas2 de cada color
         //Valor 20 para cada una
-        // for(i = 0; i < colores.length; i++) {
-        //     this.mazo.push(new Mas2(colores[i]))
-        //     this.mazo.push(new Mas2(colores[i]))
-        // }
+        for(i = 0; i < colores.length; i++) {
+            this.mazo.push(new Mas2(colores[i]))
+            this.mazo.push(new Mas2(colores[i]))
+        }
 
         // //Crear comodines y comodines+4
-        // for(i = 0; i < 4; i++) {
-        //     this.mazo.push(new CambioColor())
-        // }
+        for(i = 0; i < 4; i++) {
+            this.mazo.push(new CambioColor())
+        }
 
-        // for(i = 0; i < 4; i++) {
-        //     this.mazo.push(new Mas4())
-        // }
+        for(i = 0; i < 4; i++) {
+            this.mazo.push(new Mas4())
+        }
 
     }
 
     this.dameCartas = function(num) {
         var cartas = []
+        if (this.mazo.length<num) {
+            var cartaActual = this.mesa[this.mesa.length-1]
+            this.mazo = this.mazo.concat(this.mesa)
+            this.mesa = [cartaActual]
+        }
         for(i=0;i<num;i++) {
             var carta = this.asignarUnaCarta()
             if(carta) {
                 cartas.push(carta)
-            } else {
-                var tamMesa = this.mesa.length
-                console.log(this.mesa.splice(0,tamMesa-2))
             }
         }
         return cartas
@@ -444,8 +446,7 @@ function CambioColor(tipo = "cambiocolor") {
 }
 
 function Mas2(color, tipo = "mas2") {
-    this.color = tipo
-    this.cambio = color
+    this.color = tipo+color
     this.valor = 20
 
     this.comprobarEfecto = function(partida) {
