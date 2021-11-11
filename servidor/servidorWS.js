@@ -93,7 +93,8 @@ function ServidorWS() {
                 var ju1 = juego.usuarios[nick]
                 if (ju1) {
                     var res = {codigo: -1}
-                    var efecto = ju1.jugarCarta(num)
+                    var carta = ju1.mano[num]
+                    ju1.jugarCarta(num)
                     cli.enviarAlRemitente(socket, "mano", ju1.mano)
                     var codigo = ju1.codigoPartida
                     var partida = juego.partidas[codigo]
@@ -102,6 +103,9 @@ function ServidorWS() {
                     cli.enviarATodos(io, codigo, "turno", res)
                     // cli.enviarGlobal(socket, "cartaJugada", res)
                     cli.enviarATodos(io, codigo, "cartaJugada", res)
+                    if (carta.tipo == "cambiocolor") {
+                        cli.enviarAlRemitente(socket, "cambioColor", {})
+                    }
 
                     if (partida.fase.nombre == "final") {
                         cli.enviarATodos(io, codigo, "final", {msg: "La partida ha terminado.\nEl ganador es: "+partida.turno.nick})
@@ -143,6 +147,25 @@ function ServidorWS() {
                     }
                 } else {
                     cli.enviarAlRemitente(socket, "fallo", {msg:"El usuario no existe"})
+                }
+            })
+
+            socket.on("abandonarPartida", function(nick) {
+                var ju1 = juego.usuarios[nick]
+                if (ju1) {
+                    ju1.abandonarPartida()
+                    var codigo = ju1.codigoPartida
+                    cli.enviarATodos(io, codigo, "jugadorAbandona", {msg: "El jugador "+ju1.nick+" ha abandonado la partida"})
+                }
+            })
+            
+            socket.on("cambiarColor", function(color, nick) {
+                var ju1 = juego.usuarios[nick]
+                if(ju1) {
+                    var codigo = ju1.codigoPartida
+                    var partida = juego.partidas[codigo]
+                    partida.mesa[partida.mesa.length-1].color = color
+                    console.log(partida.mesa[partida.mesa.length-1].color)
                 }
             })
         })

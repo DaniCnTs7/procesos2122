@@ -144,6 +144,11 @@ function Jugador(nick, juego) {
         }
     }
 
+    this.abandonarPartida = function() {
+        var partida = this.obtenerPartida(this.codigoPartida)
+        partida.fase = new Final()
+    }
+
 }
 
 function Partida(codigo, propietario, numJugadores) {

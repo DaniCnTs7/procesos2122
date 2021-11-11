@@ -16,14 +16,16 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>     
     <!-- Socket io   -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <!-- JQuery-cookie -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     
     <script src="/cliente/clienteRest.js"></script>
     <script src="/cliente/clienteWS.js"></script>
     <script src="/cliente/controlWeb.js"></script>
     <style>
-        html {
+        /* html {
             overflow-y: scroll;
-        }
+        } */
         .misCartas {
             position: relative;
             top: 0;
@@ -109,7 +111,7 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button id="boton-cerrar" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                 </div>
         
             </div>
@@ -120,9 +122,12 @@
 <p id="color" class="d-none"></p>
 
 <script type="text/javascript">
-        var rest = new ClienteRest()
-        var ws = new ClienteWS()    
-        var iu = new ControlWeb()
-    </script>
+    var rest = new ClienteRest()
+    var ws = new ClienteWS()    
+    var iu = new ControlWeb()
+    if($.cookie("nick")) {
+        iu.comprobarUsuario()
+    }
+</script>
 </body>
 </html>

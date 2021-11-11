@@ -10,7 +10,7 @@ function ClienteWS() {
     }
     this.crearPartida = function(num, nick) {
         this.nick = nick
-        this.socket.emit("crearPartida", num, nick)
+        this.socket.emit("crearPartida", num, this.nick)
     }
     this.unirAPartida = function(codigo, nick=this.nick) {
         this.nick = nick
@@ -19,14 +19,20 @@ function ClienteWS() {
     this.manoInicial = function() {
         this.socket.emit("manoInicial", this.nick)
     }
-    this.jugarCarta = function(num, nick=this.nick) {
-        this.socket.emit("jugarCarta", num, nick)
+    this.jugarCarta = function(num) {
+        this.socket.emit("jugarCarta", num, this.nick)
     }
-    this.robarCarta = function(nick = this.nick) {
-        this.socket.emit("robarCarta", nick)
+    this.robarCarta = function() {
+        this.socket.emit("robarCarta", this.nick)
     }
-    this.pasarTurno = function(nick=this.nick) {
-        this.socket.emit("pasarTurno", nick)
+    this.pasarTurno = function() {
+        this.socket.emit("pasarTurno", this.nick)
+    }
+    this.abandonarPartida = function() {
+        this.socket.emit("abandonarPartida", this.nick)
+    }
+    this.cambiarColor = function(color) {
+        this.socket.emit("cambiarColor", color, this.nick)
     }
     
     //servidor WS del cliente
@@ -104,6 +110,12 @@ function ClienteWS() {
                 }
             })
             iu.mostrarCartasRival({cartasRival: 7})
+        })
+        this.socket.on("jugadorAbandona", function(data) {
+            iu.mostrarModal(data)
+        })
+        this.socket.on("cambioColor", function(data) {
+            iu.mostrarModalCambioColor()
         })
     }
 

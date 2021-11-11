@@ -4,6 +4,7 @@ function ClienteRest() {
             console.log(data)
             if(data.nick != -1) {
                 ws.nick = data.nick
+                $.cookie("nick",ws.nick)
                 iu.mostrarEleccion()
                 // rest.obtenerPartidasDisponibles()
             } else {

@@ -1,5 +1,16 @@
 function ControlWeb() {
+    
+    this.comprobarUsuario = function() {
+        if ($.cookie("nick")) {
+            ws.nick=$.cookie("nick")
+            iu.mostrarEleccion()
+        } else {
+            iu.mostrarAgregarJugador()
+        }
+    }
 
+    this.limpiar = function() {
+    }
     
     this.mostrarAgregarJugador = function() {
         
@@ -191,6 +202,20 @@ function ControlWeb() {
         $("#myModal").modal("show")
     }
 
+    this.mostrarModalCambioColor = function(data) {
+        $("#cM").remove()
+        var cadena = `
+        <div class="text-center" id="cM">
+            <button class="btn btn-primary" type="button" onclick="ws.cambiarColor("azul")" data-dismiss="modal">Azul</button>
+            <button class="btn btn-warning" type="button" onclick="ws.cambiarColor("amarillo")" data-dismiss="modal">Amarillo</button>
+            <button class="btn btn-danger" type="button" onclick="ws.cambiarColor("rojo")" data-dismiss="modal">Rojo</button>
+            <button class="btn btn-success" type="button" onclick="ws.cambiarColor("verde")" data-dismiss="modal">Verde</button>
+        </div>`
+        $("#contenidoModal").append(cadena)
+        $(".modal-title").text("Cambio de color")
+        $("#myModal").modal("show")
+    }
+
     this.mostrarMano = function(lista) {
         $("#mM").remove()
         var cadena = `
@@ -223,8 +248,9 @@ function ControlWeb() {
         var muestraNick = '<p id="turno" class="d-inline">Turno: '+data.turno+'</p>'
         $("#muestraTurno").append(muestraNick)
         $("#bienvenido").remove()
-        var div = `<button class="btn btn-danger" onclick="ws.pasarTurno()">Pasar turno</button>
-                   <button class="btn btn-primary" onclick="ws.robarCarta()">Robar carta</button>`
+        var div = `<button class="btn btn-warning" onclick="ws.pasarTurno()">Pasar turno</button>
+                   <button class="btn btn-primary" onclick="ws.robarCarta()">Robar carta</button>
+                   <button class="btn btn-danger" onclick="ws.abandonarPartida()">Abandonar partida</button>`
         $("#pasarTurno").append(div)
     }
 
