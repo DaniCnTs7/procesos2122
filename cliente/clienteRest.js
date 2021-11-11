@@ -7,7 +7,7 @@ function ClienteRest() {
                 iu.mostrarEleccion()
                 // rest.obtenerPartidasDisponibles()
             } else {
-                iu.mostrarModal("El nick '"+nick+"' está en uso.")
+                iu.mostrarModal({msg: "El nick '"+nick+"' está en uso."})
             }
         })
     } 

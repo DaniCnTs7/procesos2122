@@ -24,6 +24,14 @@
         html {
             overflow-y: scroll;
         }
+        .misCartas {
+            position: relative;
+            top: 0;
+            transition: top ease 0.1s;
+        }
+        .misCartas:hover {
+            top: -10px;
+        }
     </style>
 </head>
 <body> 
@@ -60,19 +68,25 @@
             <div id="listaJugadores" class="container scroll mb-5"></div>
         </div>
     </div>
-    <div class="container-fluid vh-100" id="tablero">
+    <div class="container-fluid" id="tablero">
         <div class="row justify-content-center">
-            <div id="rivales">
+            <div id="rivales" class="align-self-start">
                 
             </div>
         </div>
         <div class="row justify-content-center">
+            <div id="muestraTurno" class="align-self-center">
+
+            </div>
             <div id="actual">
                 
             </div>
+            <div id="pasarTurno" class="align-self-center">
+
+            </div>
         </div>
         <div class="row justify-content-center">
-            <div id="mano">
+            <div id="mano" class="mx-5">
                 
             </div>
         </div>
@@ -92,7 +106,7 @@
                 <div class="modal-body" id="contenidoModal">
                     
                 </div>
-        
+
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -102,6 +116,8 @@
         </div>
     </div>
 </main>
+
+<p id="color" class="d-none"></p>
 
 <script type="text/javascript">
         var rest = new ClienteRest()

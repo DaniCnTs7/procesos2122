@@ -184,9 +184,9 @@ function ControlWeb() {
 
     }
 
-    this.mostrarModal = function(msg) {
+    this.mostrarModal = function(data) {
         $("#cM").remove()
-        var cadena = `<p id="cM">`+msg+`</p>`
+        var cadena = `<p id="cM">`+data.msg+`</p>`
         $("#contenidoModal").append(cadena)
         $("#myModal").modal("show")
     }
@@ -197,9 +197,9 @@ function ControlWeb() {
         <div id="mM" class="card-columns row">`
         
         for (var i = 0; i<lista.length; i++) {
-            var carta = lista[i].valor + "_" + lista[i].color+".png"
+            var carta = lista[i].img+".png"
             cadena += `
-            <div id="`+i+`" class="cardcol">
+            <div id="`+i+`" class="cardcol pb-1 mb-2 misCartas">
                 <a onclick="ws.jugarCarta(`+i+`)"><img class="card-img border border-dark" src="/cliente/img/`+carta+`" alt=""></a>
             </div>`
         }
@@ -210,35 +210,45 @@ function ControlWeb() {
     this.mostrarCartaActual = function(lista) {
         $("#cartaActual").remove()
         var cartaActual = lista.cartaActual
-        var carta = cartaActual.valor + "_" + cartaActual.color+".png"
+        var carta = cartaActual.img+".png"
         var cadena = `
-        <div id="cartaActual" class="cardcol">
+        <div id="cartaActual" class="cardcol p-2 my-5 mx-4">
             <img class="card-img border border-dark" src="/cliente/img/`+carta+`" alt="">
         </div>`
         $("#actual").append(cadena)
     }
 
-    this.mostrarTablero = function() {
+    this.mostrarTablero = function(data) {
         $("#c1").remove()
+        var muestraNick = '<p id="turno" class="d-inline">Turno: '+data.turno+'</p>'
+        $("#muestraTurno").append(muestraNick)
         $("#bienvenido").remove()
+        var div = `<button class="btn btn-danger" onclick="ws.pasarTurno()">Pasar turno</button>
+                   <button class="btn btn-primary" onclick="ws.robarCarta()">Robar carta</button>`
+        $("#pasarTurno").append(div)
     }
 
     this.mostrarCartasRival = function(lista) {
         //mostrar las cartas del rival
-        var cadena
-        Object.entries(lista).forEach(([key, value]) => {
-            cadena = `
-            <div id="cartas_`+key+`" class="card-columns row">`
-            
-                for(var j = 0; j<value; j++) {
-                    cadena += `
-                    <div id="carta`+j+`_`+key+`" class="cardcol">
-                    <a onclick="ws.jugarCarta(`+j+`)"><img class="card-img border border-dark" src="/cliente/img/cartarival.png" alt=""></a>
-                    </div>`
-                }
-        })
+        $("#mR").remove()
+        var cadena = `
+        <div id="mR" class="card-columns row mx-5">`
+        
+        for (var i = 0; i<lista.cartasRival; i++) {
+            cadena += `
+            <div id="`+i+`" class="cardcol pb-1 mb-2">
+                <img class="card-img border border-dark" src="/cliente/img/cartarival.png" alt="">
+            </div>`
+        }
         cadena += '</div>'
         $("#rivales").append(cadena)
+    }
+
+    this.mostrarTurnoActual = function(data) {
+        $("#turno").remove()
+        var turnoActual = data.turno
+        var muestraNick = '<p id="turno" class="d-inline">Turno: '+turnoActual+'</p>'
+        $("#muestraTurno").append(muestraNick)
     }
     
 }

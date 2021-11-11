@@ -32,10 +32,10 @@ function ServidorWS() {
                         cli.enviarAlRemitente(socket, "partidaCreada", res)
                         cli.enviarGlobal(socket, "nuevaPartida", lista)
                     } else {
-                        cli.enviarAlRemitente(socket, "fallo", "La partida no ha podido crearse")    
+                        cli.enviarAlRemitente(socket, "fallo", {msg:"La partida debe ser de 2 a 8 jugadores"})    
                     }
                 } else {
-                    cli.enviarAlRemitente(socket, "fallo", "El usuario no existe")
+                    cli.enviarAlRemitente(socket, "fallo", {msg:"El usuario no existe"})
                 }
             })
 
@@ -57,8 +57,8 @@ function ServidorWS() {
                             if (partida.fase.nombre == "jugando") {
                                 cli.enviarATodos(io, codigo, "pedirCartas", {})
                                 cli.enviarAlRemitente(socket, "unidoAPartida", {cartaActual: partida.mesa[partida.mesa.length-1], turno: partida.turno.nick, cartasJugador: partida.turno.mano})
-                                cli.enviarGlobal(socket, "partidaEmpezada", {msg: "LA PARTIDA HA COMENZADO", cartaActual: partida.mesa[partida.mesa.length-1]})
-                                cli.enviarAlRemitente(socket, "partidaEmpezada", {msg: "LA PARTIDA HA COMENZADO", cartaActual: partida.mesa[partida.mesa.length-1]})
+                                cli.enviarGlobal(socket, "partidaEmpezada", {msg: "LA PARTIDA HA COMENZADO", cartaActual: partida.mesa[partida.mesa.length-1], turno: partida.turno.nick})
+                                cli.enviarAlRemitente(socket, "partidaEmpezada", {msg: "LA PARTIDA HA COMENZADO", cartaActual: partida.mesa[partida.mesa.length-1], turno:partida.turno.nick})
                                 var listaJugadores = {}
                                 var nombresJug = partida.nombresJug
                                 for (var i = 0; i < nombresJug.length; i++) {
@@ -70,10 +70,10 @@ function ServidorWS() {
                             }
                         } else {
                             socket.join(res)
-                            cli.enviarAlRemitente(socket, "fallo", res)
+                            cli.enviarAlRemitente(socket, "fallo", {msg: "El jugador no pertenece a ninguna partida"})
                         }
                 } else {
-                    cli.enviarAlRemitente(socket, "fallo", "El usuario o la partida no existen")
+                    cli.enviarAlRemitente(socket, "fallo", {msg:"El usuario o la partida no existen"})
                 }
             })
 
@@ -85,7 +85,7 @@ function ServidorWS() {
                     var partida = juego.partidas[ju1.codigoPartida]
                     cli.enviarAlRemitente(socket, "turno", {turno: partida.turno.nick, cartaActual: partida.mesa[partida.mesa.length-1]})
                 } else {
-                    cli.enviarAlRemitente(socket, "fallo", "El usuario no existe")
+                    cli.enviarAlRemitente(socket, "fallo", {msg:"El usuario no existe"})
                 }
             })
 
@@ -93,32 +93,40 @@ function ServidorWS() {
                 var ju1 = juego.usuarios[nick]
                 if (ju1) {
                     var res = {codigo: -1}
-                    ju1.jugarCarta(num)
+                    var efecto = ju1.jugarCarta(num)
                     cli.enviarAlRemitente(socket, "mano", ju1.mano)
                     var codigo = ju1.codigoPartida
                     var partida = juego.partidas[codigo]
-                    res = {turno: partida.turno.nick, cartaActual: partida.mesa[partida.mesa.length-1], mazo: partida.mazo, nickRival: cli.nick}
-                    cli.enviarAlRemitente(io, "cartaJugada", res)
+                    res = {turno: partida.turno.nick, cartaActual: partida.mesa[partida.mesa.length-1], mazo: partida.mazo, nombreRival: ju1.nick, cartasRival: ju1.mano.length}
+                    // cli.enviarAlRemitente(io, "cartaJugada", res)
                     cli.enviarATodos(io, codigo, "turno", res)
-                    cli.enviarGlobal(socket, "cartaJugada", res)
+                    // cli.enviarGlobal(socket, "cartaJugada", res)
+                    cli.enviarATodos(io, codigo, "cartaJugada", res)
 
                     if (partida.fase.nombre == "final") {
-                        cli.enviarATodos(io, codigo, "final", {turno: partida.turno.nick})
+                        cli.enviarATodos(io, codigo, "final", {msg: "La partida ha terminado.\nEl ganador es: "+partida.turno.nick})
                     }
                 } else {
-                    cli.enviarAlRemitente(socket, "fallo", "El usuario no existe")
+                    cli.enviarAlRemitente(socket, "fallo", {msg:"El usuario no existe"})
                 }
             })
 
             socket.on("robarCarta", function(nick) {
                 var ju1 = juego.usuarios[nick]
-                var partida = juego.partidas[ju1.codigoPartida]
-                var codigo = ju1.codigoPartida
-                ju1.robar(1)
-                var cartaRobada = ju1.mano[ju1.mano.length-1]
-                cli.enviarAlRemitente(socket, "mano", cartaRobada)
-                if (partida.fase.nombre == "final") {
-                    cli.enviarATodos(io, codigo, "final", {turno: partida.turno.nick})
+                if (ju1) {
+                    var partida = juego.partidas[ju1.codigoPartida]
+                    var codigo = ju1.codigoPartida
+                    if (partida.turno.nick == nick) {
+                        ju1.robar(1)
+                        var cartaRobada = ju1.mano
+                        cli.enviarAlRemitente(socket, "mano", cartaRobada)
+                        cli.enviarATodos(io, codigo, "cartaRobada", {cartasRival: ju1.mano.length, nombreRival: ju1.nick})
+                        if (partida.fase.nombre == "final") {
+                            cli.enviarATodos(io, codigo, "final", {turno: partida.turno.nick})
+                        }
+                    } else {
+                        cli.enviarAlRemitente(socket, "fallo", {msg: "No es tu turno"})
+                    }
                 }
             })
 
@@ -126,11 +134,15 @@ function ServidorWS() {
                 var ju1 = juego.usuarios[nick]
                 if (ju1) {
                     var partida = juego.partidas[ju1.codigoPartida]
-                    cli.enviarAlRemitente(socket, "turno", partida.turno.nick)
-                    ju1.pasarTurno()
-                    cli.enviarAlRemitente(socket, "turno", partida.turno.nick)
+                    if (partida.turno.nick == nick) {
+                        ju1.pasarTurno(nick)
+                        cli.enviarAlRemitente(socket, "turno", {turno: partida.turno.nick})
+                        cli.enviarATodos(io, ju1.codigoPartida, "turno", {turno: partida.turno.nick})       
+                    }else {
+                     cli.enviarAlRemitente(socket, "fallo", {msg:"No es tu turno"})   
+                    }
                 } else {
-                    cli.enviarAlRemitente(socket, "fallo", "El usuario no existe")
+                    cli.enviarAlRemitente(socket, "fallo", {msg:"El usuario no existe"})
                 }
             })
         })

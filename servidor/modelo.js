@@ -122,14 +122,14 @@ function Jugador(nick, juego) {
 
     this.pasarTurno = function() {
         var partida = this.obtenerPartida(this.codigoPartida)
-        partida.pasarTurno(this.nick)
+        return partida.pasarTurno(this.nick)
     }
 
     this.jugarCarta = function(num) {
         var partida = this.obtenerPartida(this.codigoPartida)
         if (this.nick == partida.turno.nick) {
             var carta = this.mano[num]
-            partida.jugarCarta(carta, this.nick)
+            return partida.jugarCarta(carta, this.nick)
         } else {
             console.log("No es tu turno")
         }
@@ -253,7 +253,7 @@ function Partida(codigo, propietario, numJugadores) {
     }
 
     this.pasarTurno = function(nick) {
-        this.fase.pasarTurno(nick, this)
+        return this.fase.pasarTurno(nick, this)
     }
 
     this.puedePasarTurno = function(nick) {
@@ -271,6 +271,7 @@ function Partida(codigo, propietario, numJugadores) {
             // }
         } else {
             console.log("No es tu turno")
+            return -1
         }
     }
 
@@ -285,7 +286,7 @@ function Partida(codigo, propietario, numJugadores) {
     }
 
     this.jugarCarta = function(carta, nick) {
-        this.fase.jugarCarta(carta, nick, this)
+        return this.fase.jugarCarta(carta, nick, this)
     }
 
     this.puedeJugarCarta = function(carta,nick) {
@@ -302,8 +303,12 @@ function Partida(codigo, propietario, numJugadores) {
 
     this.comprobarCarta=function(carta){
         var cartaActual = this.cartaActual()
-        return (cartaActual.tipo=="numero" && (cartaActual.color==carta.color || cartaActual.valor==carta.valor)
-            || cartaActual.tipo=="cambio" && (cartaActual.color==carta.color || cartaActual.tipo == carta.tipo))
+        return (cartaActual.tipo=="numero" && (cartaActual.color==carta.color || cartaActual.valor==carta.valor || carta.tipo=="cambiocolor" || carta.tipo=="mas4")
+            || cartaActual.tipo=="sentido" && (cartaActual.color==carta.color || cartaActual.tipo == carta.tipo || carta.tipo=="cambiocolor" || carta.tipo=="mas4")
+            || cartaActual.tipo=="bloqueo" && (cartaActual.color==carta.color || cartaActual.tipo == carta.tipo || carta.tipo=="cambiocolor" || carta.tipo=="mas4")
+            || cartaActual.tipo=="mas2" && (cartaActual.color==carta.color || cartaActual.tipo==carta.tipo  || carta.tipo=="cambiocolor" || carta.tipo=="mas4")
+            || cartaActual.tipo=="mas4" && ( cartaActual.tipo==carta.tipo || carta.tipo=="mas2" || carta.tipo=="mas4")
+            || cartaActual.tipo=="cambiocolor" && (cartaActual.color==carta.color))
     }
 
     this.finPartida = function() {
@@ -384,7 +389,7 @@ function Jugando() {
     }
 
     this.jugarCarta = function(carta, nick, partida) {
-        partida.puedeJugarCarta(carta, nick)
+        return partida.puedeJugarCarta(carta, nick)
     }
 }
 
@@ -410,6 +415,7 @@ function Numero(valor, color = "nocolor", tipo = "numero") {
     this.color = color
     this.valor = valor
     this.tipo = tipo
+    this.img = this.valor + '_' + this.color
 
     this.comprobarEfecto = function(partida) {
         console.log("No tiene efecto")
@@ -420,6 +426,7 @@ function Bloqueo(color, tipo = "bloqueo") {
     this.color = color
     this.tipo = tipo
     this.valor = 10
+    this.img = this.valor + '_' + this.color
 
     this.comprobarEfecto = function(partida) {
         console.log("BLOQUEO")
@@ -430,6 +437,7 @@ function Sentido(color, tipo = "sentido") {
     this.color = color
     this.tipo = tipo
     this.valor = 15
+    this.img = this.valor + '_' + this.color
 
     this.comprobarEfecto = function(partida) {
         partida.cambiarSentido()
@@ -437,17 +445,21 @@ function Sentido(color, tipo = "sentido") {
 }
 
 function CambioColor(tipo = "cambiocolor") {
-    this.color = tipo
+    this.color
+    this.tipo = tipo
     this.valor = 40
+    this.img = this.valor + '_' + this.tipo
 
     this.comprobarEfecto = function(partida) {
-        console.log("CAMBIO COLOR")
+        console.log("Cambio color")
     }
 }
 
 function Mas2(color, tipo = "mas2") {
-    this.color = tipo+color
+    this.color = color
+    this.tipo = tipo
     this.valor = 20
+    this.img = this.valor +'_'+this.tipo+this.color
 
     this.comprobarEfecto = function(partida) {
         console.log("CHUPATE DOS")
@@ -455,8 +467,10 @@ function Mas2(color, tipo = "mas2") {
 }
 
 function Mas4(tipo = "mas4") {
-    this.color = tipo
+    this.color = "mas4"
+    this.tipo = tipo
     this.valor = 50
+    this.img = this.valor + '_' +this.tipo
 
     this.comprobarEfecto = function(partida) {
         console.log("CHUPATE CUATRO")

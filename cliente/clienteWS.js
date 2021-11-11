@@ -22,10 +22,10 @@ function ClienteWS() {
     this.jugarCarta = function(num, nick=this.nick) {
         this.socket.emit("jugarCarta", num, nick)
     }
-    this.robarCarta = function(nick) {
+    this.robarCarta = function(nick = this.nick) {
         this.socket.emit("robarCarta", nick)
     }
-    this.pasarTurno = function(nick) {
+    this.pasarTurno = function(nick=this.nick) {
         this.socket.emit("pasarTurno", nick)
     }
     
@@ -60,8 +60,9 @@ function ClienteWS() {
         })
         this.socket.on("partidaEmpezada", function(data) {
             console.log(data)
-            iu.mostrarTablero()
+            iu.mostrarTablero(data)
             iu.mostrarCartaActual(data)
+            iu.mostrarCartasRival(data)
         })
         this.socket.on("pedirCartas", function(data) {
             cli.manoInicial()
@@ -72,17 +73,28 @@ function ClienteWS() {
         })
         this.socket.on("turno", function(data) {
             console.log(data)
+            iu.mostrarTurnoActual(data)
         })
         this.socket.on("cartaJugada", function(data) {
             console.log(data)
             iu.mostrarCartaActual(data)
-            $("#carta0_"+data.nickRival).remove()
+            if(cli.nick != data.nombreRival) {
+                iu.mostrarCartasRival(data)
+            }
+        })
+        this.socket.on("cartaRobada", function(data) {
+            console.log(data)
+            if(cli.nick != data.nombreRival) {
+                iu.mostrarCartasRival(data)
+            }
         })
         this.socket.on("fallo", function(data) {
             console.log(data)
-            if (data == 'La partida no ha podido crearse') {
-                iu.mostrarModal('La partida debe ser de 2 a 8 jugadores')
-            }
+            iu.mostrarModal(data)
+        })
+        this.socket.on("final", function(data) {
+            console.log(data)
+            iu.mostrarModal(data)
         })
         this.socket.on("jugadoresEnPartida", function(data) {
             var rivales = {}
@@ -91,7 +103,7 @@ function ClienteWS() {
                     rivales[key] = value
                 }
             })
-            iu.mostrarCartasRival(rivales)
+            iu.mostrarCartasRival({cartasRival: 7})
         })
     }
 
